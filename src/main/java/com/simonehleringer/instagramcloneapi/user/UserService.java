@@ -1,9 +1,6 @@
 package com.simonehleringer.instagramcloneapi.user;
 
-import com.simonehleringer.instagramcloneapi.user.exception.CanNotCreateUserException;
-import com.simonehleringer.instagramcloneapi.user.exception.EmailAlreadyTakenException;
-import com.simonehleringer.instagramcloneapi.user.exception.PasswordTooWeakException;
-import com.simonehleringer.instagramcloneapi.user.exception.UsernameAlreadyTakenException;
+import com.simonehleringer.instagramcloneapi.user.exception.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +17,11 @@ public class UserService {
 
     @Transactional
     public User createUser(User userToCreate, String password) throws CanNotCreateUserException {
+        // Validate email
+        if (!userToCreate.getEmail().matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")) {
+            throw new EmailInvalidException();
+        }
+
         var optionalExistingUserByUsername = userRepository.findByUsername(userToCreate.getUsername());
 
         if (optionalExistingUserByUsername.isPresent()) {
@@ -33,15 +35,13 @@ public class UserService {
         }
 
         // TODO: Constant for regex?
+
         // Validate password
         if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$")) {
             throw new PasswordTooWeakException();
         }
 
-        // TODO: Validation; What happens, when userId ist given?
         userToCreate.setEncodedPassword(passwordEncoder.encode(password));
-
-        // TODO: Check, if userToCreate is same instance as createdUser
 
         return userRepository.save(userToCreate);
     }
