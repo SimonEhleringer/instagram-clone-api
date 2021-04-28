@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
@@ -15,13 +16,14 @@ import java.util.UUID;
 public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final RefreshTokenSettings refreshTokenSettings;
+    private final Clock clock;
 
     @Transactional
     public RefreshToken generateNewRefreshToken(User user) {
         var refreshTokenToCreate = new RefreshToken(
                 UUID.randomUUID().toString(),
-                LocalDateTime.now(ZoneId.of("UTC")),
-                LocalDateTime.now(ZoneId.of("UTC")).plusSeconds(refreshTokenSettings.getLifeTime().toSeconds()),
+                LocalDateTime.now(clock),
+                LocalDateTime.now(clock).plusSeconds(refreshTokenSettings.getLifeTime().toSeconds()),
                 true,
                 user
         );
