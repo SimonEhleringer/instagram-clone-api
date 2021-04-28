@@ -1,17 +1,13 @@
 package com.simonehleringer.instagramcloneapi.user;
 
+import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken.RefreshToken;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,6 +17,7 @@ import java.util.UUID;
 public class User {
     // TODO: Validation, Constants for validation
     // TODO: Validation messages
+    // TODO: Test validation
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -33,15 +30,17 @@ public class User {
     @Size(max = 30)
     private String fullName;
 
-    @NotNull
+    @Column(nullable = false)
     @Size(max = 30)
+    // Only characters, numbers and underscore
+    @Pattern(regexp = "^[a-zA-Z0-9_]*$")
     private String username;
 
-    @NotNull
-    @Size(max = 320)
+    @Column(nullable = false)
+    @Email
     private String email;
 
-    @NotNull
+    @Column(nullable = false)
     @Size(max = 60)
     private String encodedPassword;
 
@@ -53,13 +52,16 @@ public class User {
     // TODO: Validation -> Length
     private String profileImageLocation;
 
-    public User(@Size(max = 30) String fullName, @NotNull @Size(max = 30) String username, @NotNull @Size(max = 320) String email) {
+    @OneToMany(mappedBy = "user")
+    private List<RefreshToken> refreshTokens;
+
+    public User(@Size(max = 30) String fullName, @Size(max = 30) @Pattern(regexp = "^[a-zA-Z0-9_]*$") String username, @Email String email) {
         this.fullName = fullName;
         this.username = username;
         this.email = email;
     }
 
-    public User(@Size(max = 30) String fullName, @NotNull @Size(max = 30) String username, @NotNull @Size(max = 320) String email, @NotNull @Size(max = 60) String encodedPassword, @Size(max = 150) String characteristics, String profileImageLocation) {
+    public User(@Size(max = 30) String fullName, @Size(max = 30) @Pattern(regexp = "^[a-zA-Z0-9_]*$") String username, @Email String email, @Size(max = 60) String encodedPassword, @Size(max = 150) String characteristics, String profileImageLocation) {
         this.fullName = fullName;
         this.username = username;
         this.email = email;

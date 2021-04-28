@@ -1,19 +1,23 @@
 package com.simonehleringer.instagramcloneapi.authentication;
 
+import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.AccessAndRefreshToken;
+import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.AccessAndRefreshTokenService;
 import com.simonehleringer.instagramcloneapi.user.User;
 import com.simonehleringer.instagramcloneapi.user.UserService;
-import com.simonehleringer.instagramcloneapi.user.CanNotCreateUserException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class AuthenticationService {
     private final UserService userService;
+    private final AccessAndRefreshTokenService accessAndRefreshTokenService;
 
-    public AuthenticationResult register(String fullName, String username, String email, String password) {
-
-        var result = new AuthenticationResult();
+    @Transactional
+    public AccessAndRefreshToken register(String fullName, String username, String email, String password) {
 
         var userToCreate = new User(
                 fullName,
@@ -21,13 +25,8 @@ public class AuthenticationService {
                 email
         );
 
-        try {
-            var createdUser = userService.createUser(userToCreate, password);
+        var createdUser = userService.createUser(userToCreate, password);
 
-        } catch (CanNotCreateUserException e) {
-            result.getErrors().add(e.getMessage());
-        }
-
-        return result;
+        return accessAndRefreshTokenService.generateNewAccessAndRefreshToken(createdUser);
     }
 }

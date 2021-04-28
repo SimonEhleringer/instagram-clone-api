@@ -4,10 +4,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 // TODO: Write tests
 
 @Service
+@Validated
 @Transactional(readOnly = true)
 @AllArgsConstructor
 public class UserService {
@@ -15,7 +20,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User createUser(User userToCreate, String password) {
+    // TODO: Pattern message
+    public User createUser(User userToCreate, @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,50}$") @Valid String password) {
         // TODO: Remove comments
         // Validate email
 //        if (!userToCreate.getEmail().matches("^\\S+@\\S+\\.\\S+$")) {
