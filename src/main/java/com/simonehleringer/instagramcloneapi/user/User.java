@@ -37,7 +37,6 @@ public class User {
     @Size(max = 30)
     private String username;
 
-    // TODO: Maybe NotNull and Size are not needed
     @NotNull
     @Size(max = 320)
     private String email;
@@ -58,5 +57,14 @@ public class User {
         this.fullName = fullName;
         this.username = username;
         this.email = email;
+    }
+
+    public User(@Size(max = 30) String fullName, @NotNull @Size(max = 30) String username, @NotNull @Size(max = 320) String email, @NotNull @Size(max = 60) String encodedPassword, @Size(max = 150) String characteristics, String profileImageLocation) {
+        this.fullName = fullName;
+        this.username = username;
+        this.email = email;
+        this.encodedPassword = encodedPassword;
+        this.characteristics = characteristics;
+        this.profileImageLocation = profileImageLocation;
     }
 }

@@ -1,6 +1,5 @@
 package com.simonehleringer.instagramcloneapi.user;
 
-import com.simonehleringer.instagramcloneapi.user.exception.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,30 +15,29 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User createUser(User userToCreate, String password) throws CanNotCreateUserException {
+    public User createUser(User userToCreate, String password) {
+        // TODO: Remove comments
         // Validate email
-        if (!userToCreate.getEmail().matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")) {
-            throw new EmailInvalidException();
+//        if (!userToCreate.getEmail().matches("^\\S+@\\S+\\.\\S+$")) {
+//            throw new CanNotCreateUserException("Diese E-Mail ist nicht valide.");
+//        }
+//
+//        if (!userToCreate.getUsername().matches("^[a-zA-Z0-9_]*$")) {
+//            throw new CanNotCreateUserException("Der Benutzername darf nur Buchstaben, Zahlen und den Unterstrich enthalten.");
+//        }
+
+        if (!userRepository.existsByUsernameIgnoreCase(userToCreate.getUsername())) {
+            throw new CanNotCreateUserException("Dieser Benutzername ist bereits vergeben.");
         }
 
-        var optionalExistingUserByUsername = userRepository.findByUsername(userToCreate.getUsername());
-
-        if (optionalExistingUserByUsername.isPresent()) {
-            throw new UsernameAlreadyTakenException();
+        if (!userRepository.existsByEmailIgnoreCase(userToCreate.getEmail())) {
+            throw new CanNotCreateUserException("Diese E-Mail ist bereits vergeben.");
         }
-
-        var optionalExistingUserByEmail = userRepository.findByEmail(userToCreate.getEmail());
-
-        if (optionalExistingUserByEmail.isPresent()) {
-            throw new EmailAlreadyTakenException();
-        }
-
-        // TODO: Constant for regex?
 
         // Validate password
-        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$")) {
-            throw new PasswordTooWeakException();
-        }
+//        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,50}$")) {
+//            throw new CanNotCreateUserException("Das Passwort muss zwischen 6 und 50 Zeichen lang sein, einen Groß- und Kleinbuchstaben sowie eine Zahl und ein Sonderzeichen enthalten.");
+//        }
 
         userToCreate.setEncodedPassword(passwordEncoder.encode(password));
 

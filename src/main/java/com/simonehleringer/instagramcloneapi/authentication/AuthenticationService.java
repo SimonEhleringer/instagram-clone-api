@@ -2,11 +2,9 @@ package com.simonehleringer.instagramcloneapi.authentication;
 
 import com.simonehleringer.instagramcloneapi.user.User;
 import com.simonehleringer.instagramcloneapi.user.UserService;
-import com.simonehleringer.instagramcloneapi.user.exception.CanNotCreateUserException;
+import com.simonehleringer.instagramcloneapi.user.CanNotCreateUserException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -22,8 +20,6 @@ public class AuthenticationService {
                 username,
                 email
         );
-
-        userToCreate.setUserId(UUID.randomUUID());
 
         try {
             var createdUser = userService.createUser(userToCreate, password);
