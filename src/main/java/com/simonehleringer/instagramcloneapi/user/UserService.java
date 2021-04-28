@@ -26,11 +26,11 @@ public class UserService {
 //            throw new CanNotCreateUserException("Der Benutzername darf nur Buchstaben, Zahlen und den Unterstrich enthalten.");
 //        }
 
-        if (!userRepository.existsByUsernameIgnoreCase(userToCreate.getUsername())) {
+        if (userRepository.existsByUsernameIgnoreCase(userToCreate.getUsername())) {
             throw new CanNotCreateUserException("Dieser Benutzername ist bereits vergeben.");
         }
 
-        if (!userRepository.existsByEmailIgnoreCase(userToCreate.getEmail())) {
+        if (userRepository.existsByEmailIgnoreCase(userToCreate.getEmail())) {
             throw new CanNotCreateUserException("Diese E-Mail ist bereits vergeben.");
         }
 

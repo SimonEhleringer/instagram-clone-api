@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class InstagramCloneApiApplicationTests {
 	// TODO: Write test
+	// TODO: Rename
 
 	@Test
 	void contextLoads() {
