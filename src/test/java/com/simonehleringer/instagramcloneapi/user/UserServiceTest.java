@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.validation.constraints.Null;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,6 +62,7 @@ class UserServiceTest {
         assertThat(capturedUser).isEqualTo(user);
 
         verify(passwordEncoder).encode(password);
+
     }
 
     @Test
@@ -110,6 +113,28 @@ class UserServiceTest {
                 .isInstanceOf(CanNotCreateUserException.class);
 
         verify(userRepository).existsByUsernameIgnoreCase(username);
+
+        verify(passwordEncoder, never()).encode(anyString());
+
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void createUser_givenNullUserToCreate_shouldThrow() {
+        assertThatThrownBy(() ->
+                underTest.createUser(null, "password"))
+                .isInstanceOf(NullPointerException.class);
+
+        verify(passwordEncoder, never()).encode(anyString());
+
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void createUser_givenNullPassword_shouldThrow() {
+        assertThatThrownBy(() ->
+                underTest.createUser(new User(), null))
+                .isInstanceOf(NullPointerException.class);
 
         verify(passwordEncoder, never()).encode(anyString());
 

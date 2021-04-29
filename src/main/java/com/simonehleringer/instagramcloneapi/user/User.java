@@ -32,18 +32,18 @@ public class User {
     @Size(max = 30)
     private String fullName;
 
-    @Column(nullable = false)
+    @NotNull
     @Size(max = 30)
     // Only characters, numbers and underscore
     @Pattern(regexp = "^[a-zA-Z0-9_]*$")
     private String username;
 
     // TODO: Check, how long database column can be
-    @Column(nullable = false)
+    @NotNull
     @Email
     private String email;
 
-    @Column(nullable = false)
+    @NotNull
     @Size(max = 60)
     private String encodedPassword;
 
