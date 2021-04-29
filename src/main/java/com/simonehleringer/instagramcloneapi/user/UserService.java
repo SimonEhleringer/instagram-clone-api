@@ -21,7 +21,7 @@ public class UserService {
 
     @Transactional
     // TODO: Pattern message
-    public User createUser(User userToCreate, @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,50}$") @Valid String password) {
+    public User createUser(@Valid User userToCreate, @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,50}$") @Valid String password) {
         // TODO: Remove comments
         // Validate email
 //        if (!userToCreate.getEmail().matches("^\\S+@\\S+\\.\\S+$")) {

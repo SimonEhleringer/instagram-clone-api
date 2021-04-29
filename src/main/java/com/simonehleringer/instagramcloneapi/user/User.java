@@ -1,6 +1,7 @@
 package com.simonehleringer.instagramcloneapi.user;
 
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken.RefreshToken;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Table(name = "appUser")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
     // TODO: Validation, Constants for validation
     // TODO: Validation messages
@@ -36,6 +38,7 @@ public class User {
     @Pattern(regexp = "^[a-zA-Z0-9_]*$")
     private String username;
 
+    // TODO: Check, how long database column can be
     @Column(nullable = false)
     @Email
     private String email;
