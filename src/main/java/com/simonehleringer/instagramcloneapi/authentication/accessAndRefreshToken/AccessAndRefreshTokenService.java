@@ -4,6 +4,7 @@ import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToke
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken.RefreshTokenService;
 import com.simonehleringer.instagramcloneapi.user.User;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +13,7 @@ public class AccessAndRefreshTokenService {
     private final AccessTokenService accessTokenService;
     private final RefreshTokenService refreshTokenService;
 
-    public AccessAndRefreshToken generateNewAccessAndRefreshToken(User user) {
+    public AccessAndRefreshToken generateNewAccessAndRefreshToken(@NonNull User user) {
         var accessToken = accessTokenService.generateNewAccessToken(user);
 
         var refreshToken = refreshTokenService.generateNewRefreshToken(user);

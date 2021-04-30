@@ -3,6 +3,7 @@ package com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshTok
 import com.simonehleringer.instagramcloneapi.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class RefreshToken {
     @Id
     private String token;
