@@ -1,5 +1,6 @@
 package com.simonehleringer.instagramcloneapi.user;
 
+import com.simonehleringer.instagramcloneapi.ValidationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,11 +28,14 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private ValidationService validationService;
+
     private UserService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new UserService(userRepository, passwordEncoder);
+        underTest = new UserService(userRepository, passwordEncoder, validationService);
     }
 
     @Test
@@ -53,6 +57,9 @@ class UserServiceTest {
         underTest.createUser(user, password);
 
         // Assert
+        verify(validationService).validate(user);
+        verify(validationService).validate(password);
+
         var userArgumentCaptor = ArgumentCaptor.forClass(User.class);
 
         verify(userRepository).save(userArgumentCaptor.capture());
@@ -62,7 +69,6 @@ class UserServiceTest {
         assertThat(capturedUser).isEqualTo(user);
 
         verify(passwordEncoder).encode(password);
-
     }
 
     @Test
@@ -83,6 +89,9 @@ class UserServiceTest {
         assertThatThrownBy(() ->
                 underTest.createUser(user, password))
                 .isInstanceOf(CanNotCreateUserException.class);
+
+        verify(validationService).validate(user);
+        verify(validationService).validate(password);
 
         verify(userRepository, never()).existsByEmailIgnoreCase(anyString());
 
@@ -112,6 +121,9 @@ class UserServiceTest {
                 underTest.createUser(user, password))
                 .isInstanceOf(CanNotCreateUserException.class);
 
+        verify(validationService).validate(user);
+        verify(validationService).validate(password);
+
         verify(userRepository).existsByUsernameIgnoreCase(username);
 
         verify(passwordEncoder, never()).encode(anyString());
@@ -125,6 +137,8 @@ class UserServiceTest {
                 underTest.createUser(null, "password"))
                 .isInstanceOf(NullPointerException.class);
 
+        verify(validationService, never()).validate(any());
+
         verify(passwordEncoder, never()).encode(anyString());
 
         verify(userRepository, never()).save(any());
@@ -135,6 +149,8 @@ class UserServiceTest {
         assertThatThrownBy(() ->
                 underTest.createUser(new User(), null))
                 .isInstanceOf(NullPointerException.class);
+
+        verify(validationService, never()).validate(any());
 
         verify(passwordEncoder, never()).encode(anyString());
 
