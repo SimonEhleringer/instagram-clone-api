@@ -12,9 +12,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,7 +35,14 @@ class AccessAndRefreshTokenServiceTest {
         // Arrange
         var user = new User();
         var accessToken = "accessToken";
-        var refreshToken = new RefreshToken();
+        var refreshTokenToken = "refreshToken";
+        var refreshToken = new RefreshToken(
+                refreshTokenToken,
+                null,
+                null,
+                true,
+                null
+        );
 
         given(accessTokenService.generateNewAccessToken(any())).willReturn(accessToken);
         given(refreshTokenService.generateNewRefreshToken(any())).willReturn(refreshToken);
@@ -43,18 +52,26 @@ class AccessAndRefreshTokenServiceTest {
 
         // Assert
         assertThat(accessAndRefreshToken.getAccessToken()).isEqualTo(accessToken);
-        assertThat(accessAndRefreshToken.getRefreshToken()).isSameAs(refreshToken);
+        assertThat(accessAndRefreshToken.getRefreshToken()).isSameAs(refreshToken.getToken());
 
         var userArgumentCaptor = ArgumentCaptor.forClass(User.class);
 
-        // TODO: Check if same captured user is ok for both?
         verify(accessTokenService).generateNewAccessToken(userArgumentCaptor.capture());
-        verify(refreshTokenService).generateNewRefreshToken(userArgumentCaptor.capture());
-
         var capturedUser = userArgumentCaptor.getValue();
+        assertThat(capturedUser).isSameAs(user);
 
+        verify(refreshTokenService).generateNewRefreshToken(userArgumentCaptor.capture());
+        capturedUser = userArgumentCaptor.getValue();
         assertThat(capturedUser).isSameAs(user);
     }
 
-    // TODO: Test null user
+    @Test
+    void generateNewAccessAndRefreshToken_givenNullUser_throws() {
+        assertThatThrownBy(() ->
+                underTest.generateNewAccessAndRefreshToken(null))
+                .isInstanceOf(NullPointerException.class);
+
+        verify(accessTokenService, never()).generateNewAccessToken(any());
+        verify(refreshTokenService, never()).generateNewRefreshToken(any());
+    }
 }

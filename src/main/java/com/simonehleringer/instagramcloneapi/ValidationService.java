@@ -8,9 +8,12 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 @Service
+@AllArgsConstructor
 public class ValidationService {
     // TODO: Write tests
-    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private final Validator validator;
+
+    //Validation.buildDefaultValidatorFactory().getValidator();
 
     public <T> void validate(T t) {
         var violations = validator.validate(t);
