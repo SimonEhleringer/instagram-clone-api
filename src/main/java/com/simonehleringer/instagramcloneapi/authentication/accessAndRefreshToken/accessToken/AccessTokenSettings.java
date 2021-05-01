@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 
 // TODO: Constants for prefix
-@ConfigurationProperties(prefix = "application.token.accessToken")
+@ConfigurationProperties(prefix = "application.token.accesstoken")
 @Component
 @Data
 public class AccessTokenSettings {
