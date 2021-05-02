@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 @AllArgsConstructor
@@ -28,5 +30,29 @@ public class AuthenticationService {
         var createdUser = userService.createUser(userToCreate, password);
 
         return accessAndRefreshTokenService.generateNewAccessAndRefreshToken(createdUser);
+    }
+
+    @Transactional
+    public AccessAndRefreshToken login(String usernameOrEmail, String password) {
+        Optional<User> optionalUser;
+
+        // if usernameOrEmail contains "@" then search for an email
+        if (usernameOrEmail.contains("@")) {
+            optionalUser = userService.getByEmail(usernameOrEmail);
+        } else {
+            optionalUser = userService.getByUsername(usernameOrEmail);
+        }
+
+        if (optionalUser.isEmpty()) {
+            throw new UsernameOrEmailNotFoundException();
+        }
+
+        var user = optionalUser.get();
+
+        if (!userService.checkPassword(user, password)) {
+            throw new WrongPasswordException();
+        }
+
+        return accessAndRefreshTokenService.generateNewAccessAndRefreshToken(user);
     }
 }

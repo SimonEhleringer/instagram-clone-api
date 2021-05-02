@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/authentication")
 @AllArgsConstructor
 public class AuthenticationController {
+    // TODO: Build endpoints
     private final AuthenticationService authenticationService;
 
     @PostMapping(path = "/login")

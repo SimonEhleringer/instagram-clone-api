@@ -14,6 +14,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.Pattern;
 import java.util.Objects;
+import java.util.Optional;
 
 // TODO: Write tests
 
@@ -42,6 +43,18 @@ public class UserService {
         userToCreate.setEncodedPassword(passwordEncoder.encode(password));
 
         return userRepository.save(userToCreate);
+    }
+
+    public Optional<User> getByUsername(String username) {
+        return userRepository.findByUsernameIgnoreCase(username);
+    }
+
+    public Optional<User> getByEmail(String email) {
+        return userRepository.findByEmailIgnoreCase(email);
+    }
+
+    public boolean checkPassword(User user, String password) {
+        return passwordEncoder.matches(password, user.getEncodedPassword());
     }
 
 }

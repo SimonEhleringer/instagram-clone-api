@@ -4,12 +4,16 @@ import com.simonehleringer.instagramcloneapi.ValidationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Null;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -155,5 +159,81 @@ class UserServiceTest {
         verify(passwordEncoder, never()).encode(anyString());
 
         verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void getByUsername_shouldReturnUser() {
+        // Arrange
+        var username = "Username";
+
+        var expected = Optional.of(new User(
+                "FullName",
+                username,
+                "FullName@mail.com",
+                "EncodedPassword",
+                "Characteristics",
+                "ProfileImageLocation"
+        ));
+
+        given(userRepository.findByUsernameIgnoreCase(username)).willReturn(expected);
+
+        // Act
+        var actual = underTest.getByUsername(username);
+
+        // Assert
+        verify(userRepository).findByUsernameIgnoreCase(username);
+        assertThat(actual).isSameAs(expected);
+    }
+
+    @Test
+    void getByEmail_shouldReturnUser() {
+        // Arrange
+        var email = "FullName@gmail.com";
+
+        var expected = Optional.of(new User(
+                "FullName",
+                "Username",
+                email,
+                "EncodedPassword",
+                "Characteristics",
+                "ProfileImageLocation"
+        ));
+
+        given(userRepository.findByEmailIgnoreCase(email)).willReturn(expected);
+
+        // Act
+        var actual = underTest.getByEmail(email);
+
+        // Assert
+        verify(userRepository).findByEmailIgnoreCase(email);
+        assertThat(actual).isSameAs(expected);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "true",
+            "false"
+    })
+    void checkPassword_checksPasswordAndReturnsResult(boolean expected) {
+        // Arrange
+        var user = new User(
+                "",
+                "",
+                "",
+                "EncodedPassword",
+                "",
+                ""
+        );
+
+        var password = "Password";
+
+        given(passwordEncoder.matches(password, user.getEncodedPassword())).willReturn(expected);
+
+        // Act
+        var actual = underTest.checkPassword(user, password);
+
+        // Assert
+        verify(passwordEncoder).matches(password, user.getEncodedPassword());
+        assertThat(actual).isEqualTo(expected);
     }
 }

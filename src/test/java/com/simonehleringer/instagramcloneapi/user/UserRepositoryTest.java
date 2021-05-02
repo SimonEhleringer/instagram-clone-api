@@ -71,4 +71,103 @@ class UserRepositoryTest {
         // Assert
         assertThat(actual).isEqualTo(expected);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "Username, Username",
+            "Username, userName"
+    })
+    void findByUsernameIgnoreCase_givenExistingUsername_shouldFindUser(String usernameToSave, String usernameToSearchFor) {
+        // Arrange
+        var user = new User(
+                "FullName",
+                usernameToSave,
+                "FullName@Mail.com",
+                "EncodedPassword",
+                "Characteristics",
+                "ProfileImageLocation"
+        );
+
+        underTest.save(user);
+
+        // Act
+        var optionalFoundUser = underTest.findByUsernameIgnoreCase(usernameToSearchFor);
+
+        // Assert
+        assertThat(optionalFoundUser.get()).isSameAs(user);
+    }
+
+    @Test
+    void findByUsernameIgnoreCase_givenNotExistingUsername_shouldNotFindUser() {
+        // Arrange
+        var usernameToSave = "UsernameToSave";
+        var usernameToSearchFor = "UsernameToSearchFor";
+
+        var user = new User(
+                "FullName",
+                usernameToSave,
+                "FullName@Mail.com",
+                "EncodedPassword",
+                "Characteristics",
+                "ProfileImageLocation"
+        );
+
+        underTest.save(user);
+
+        // Act
+        var optionalFoundUser = underTest.findByUsernameIgnoreCase(usernameToSearchFor);
+
+        // Assert
+        assertThat(optionalFoundUser).isEmpty();
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "FullName@Mail.com, FullName@Mail.com",
+            "FullName@Mail.com, fullname@mail.com"
+    })
+    void findByEmailIgnoreCase_givenExistingEmail_shouldFindUser(String emailToSave, String emailToSearchFor) {
+        // Arrange
+        var user = new User(
+                "FullName",
+                "Username",
+                emailToSave,
+                "EncodedPassword",
+                "Characteristics",
+                "ProfileImageLocation"
+        );
+
+        underTest.save(user);
+
+        // Act
+        var optionalFoundUser = underTest.findByEmailIgnoreCase(emailToSearchFor);
+
+        // Assert
+        assertThat(optionalFoundUser.get()).isSameAs(user);
+    }
+
+    @Test
+    void findByEmailIgnoreCase_givenNotExistingEmail_shouldNotFindUser() {
+        // Arrange
+        var emailToSave = "EmailToSave@Mail.com";
+        var emailToSearchFor = "EmailToSearchFor@Mail.com";
+
+        var user = new User(
+                "FullName",
+                "Username",
+                emailToSave,
+                "EncodedPassword",
+                "Characteristics",
+                "ProfileImageLocation"
+        );
+
+        underTest.save(user);
+
+        // Act
+        var optionalFoundUser = underTest.findByEmailIgnoreCase(emailToSearchFor);
+
+        // Assert
+        assertThat(optionalFoundUser).isEmpty();
+    }
+
 }
