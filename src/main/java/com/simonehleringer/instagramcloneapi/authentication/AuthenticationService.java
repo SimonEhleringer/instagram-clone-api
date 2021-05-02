@@ -2,6 +2,7 @@ package com.simonehleringer.instagramcloneapi.authentication;
 
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.AccessAndRefreshToken;
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.AccessAndRefreshTokenService;
+import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken.RefreshTokenService;
 import com.simonehleringer.instagramcloneapi.user.User;
 import com.simonehleringer.instagramcloneapi.user.UserService;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class AuthenticationService {
     private final UserService userService;
+    private final RefreshTokenService refreshTokenService;
     private final AccessAndRefreshTokenService accessAndRefreshTokenService;
 
     @Transactional
@@ -54,5 +56,26 @@ public class AuthenticationService {
         }
 
         return accessAndRefreshTokenService.generateNewAccessAndRefreshToken(user);
+    }
+
+    // TODO: Write tests
+    @Transactional
+    public AccessAndRefreshToken refreshAccessToken(String refreshToken) {
+        var optionalInvalidatedRefreshToken = refreshTokenService.invalidateToken(refreshToken);
+
+        if (optionalInvalidatedRefreshToken.isEmpty()) {
+            throw new RefreshTokenIsInvalidException();
+        }
+
+        var invalidatedRefreshToken = optionalInvalidatedRefreshToken.get();
+
+        var user = invalidatedRefreshToken.getUser();
+
+        return accessAndRefreshTokenService.generateNewAccessAndRefreshToken(user);
+    }
+
+    @Transactional
+    public void logout(String refreshToken) {
+        refreshTokenService.invalidateToken(refreshToken);
     }
 }

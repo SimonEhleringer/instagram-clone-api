@@ -9,6 +9,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,5 +33,34 @@ public class RefreshTokenService {
         );
 
         return refreshTokenRepository.save(refreshTokenToCreate);
+    }
+
+    // TODO: Write tests
+    public Optional<RefreshToken> getRefreshTokenByToken(String token) {
+        return refreshTokenRepository.findById(token);
+    }
+
+    public boolean validateRefreshToken(RefreshToken refreshToken) {
+        return refreshToken != null
+                && !LocalDateTime.now(clock).isAfter(refreshToken.getExpiryTime())
+                && refreshToken.isValid();
+    }
+
+    @Transactional
+    public Optional<RefreshToken> invalidateToken(String tokenToInvalidate) {
+        var optionalRefreshTokenToInvalidate = getRefreshTokenByToken(tokenToInvalidate);
+
+        if (optionalRefreshTokenToInvalidate.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var refreshTokenToInvalidate = optionalRefreshTokenToInvalidate.get();
+
+        if (!validateRefreshToken(refreshTokenToInvalidate)) {
+            return Optional.empty();
+        }
+
+        refreshTokenToInvalidate.setValid(false);
+        return Optional.of(refreshTokenToInvalidate);
     }
 }
