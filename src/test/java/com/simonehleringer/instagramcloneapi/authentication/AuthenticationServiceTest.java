@@ -2,6 +2,8 @@ package com.simonehleringer.instagramcloneapi.authentication;
 
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.AccessAndRefreshToken;
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.AccessAndRefreshTokenService;
+import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken.RefreshToken;
+import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken.RefreshTokenService;
 import com.simonehleringer.instagramcloneapi.user.User;
 import com.simonehleringer.instagramcloneapi.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,9 @@ class AuthenticationServiceTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private RefreshTokenService refreshTokenService;
 
     @Mock
     private AccessAndRefreshTokenService accessAndRefreshTokenService;
@@ -174,5 +179,68 @@ class AuthenticationServiceTest {
 
         verify(userService).checkPassword(user, password);
         verify(accessAndRefreshTokenService, never()).generateNewAccessAndRefreshToken(any());
+    }
+
+    @Test
+    void refreshAccessToken_givenValidToken_returnsNewAccessAndRefreshToken() {
+        // Arrange
+        // TODO: Constant for GUID?
+        var token = "11111111-1111-1111-1111-111111111111";
+
+        var user = new User();
+
+        var invalidatedRefreshToken = new RefreshToken(
+                "",
+                null,
+                null,
+                true,
+                user
+        );
+        var optionalInvalidatedRefreshToken = Optional.of(invalidatedRefreshToken);
+
+        var expectedAccessAndRefreshToken = new AccessAndRefreshToken();
+
+        given(refreshTokenService.invalidateToken(token)).willReturn(optionalInvalidatedRefreshToken);
+        given(accessAndRefreshTokenService.generateNewAccessAndRefreshToken(user)).willReturn(expectedAccessAndRefreshToken);
+
+        // Act
+        var actualAccessAndRefreshToken = underTest.refreshAccessToken(token);
+
+        // Assert
+        verify(refreshTokenService).invalidateToken(token);
+        verify(accessAndRefreshTokenService).generateNewAccessAndRefreshToken(user);
+
+        assertThat(actualAccessAndRefreshToken).isSameAs(expectedAccessAndRefreshToken);
+    }
+
+    @Test
+    void refreshAccessToken_givenInvalidToken_throws() {
+        // Arrange
+        // TODO: Constant for GUID?
+        var token = "11111111-1111-1111-1111-111111111111";
+
+        given(refreshTokenService.invalidateToken(token)).willReturn(Optional.empty());
+
+        // Act
+        // Assert
+        assertThatThrownBy(() ->
+                underTest.refreshAccessToken(token))
+                .isInstanceOf(RefreshTokenIsInvalidException.class);
+
+        verify(refreshTokenService).invalidateToken(token);
+        verify(accessAndRefreshTokenService, never()).generateNewAccessAndRefreshToken(any());
+    }
+
+    @Test
+    void logout_invalidatesRefreshToken() {
+        // Arrange
+        // TODO: Constant for GUID?
+        var token = "11111111-1111-1111-1111-111111111111";
+
+        // Act
+        underTest.logout(token);
+
+        // Assert
+        verify(refreshTokenService).invalidateToken(token);
     }
 }
