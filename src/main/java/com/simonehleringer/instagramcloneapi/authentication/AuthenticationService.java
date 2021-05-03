@@ -58,7 +58,7 @@ public class AuthenticationService {
         return accessAndRefreshTokenService.generateNewAccessAndRefreshToken(user);
     }
 
-    // TODO: Write tests
+
     @Transactional
     public AccessAndRefreshToken refreshAccessToken(String refreshToken) {
         var optionalInvalidatedRefreshToken = refreshTokenService.invalidateToken(refreshToken);
