@@ -147,31 +147,75 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void invalidateToken() {
+    void invalidateToken_givenValidToken_shouldReturnOptionalOfInvalidatedRefreshToken() {
         // Arrange
         var token = MOCKED_UUID.toString();
 
-        var refreshTokenToInvalidate = new RefreshToken();
+        var refreshTokenToInvalidate = spy(new RefreshToken());
         var optionalRefreshTokenToInvalidate = Optional.of(refreshTokenToInvalidate);
 
         var spy = spy(underTest);
 
-        doReturn(optionalRefreshTokenToInvalidate).when(spy).getRefreshTokenByToken(anyString());
+        doReturn(optionalRefreshTokenToInvalidate).when(spy).getRefreshTokenByToken(token);
         doReturn(true).when(spy).validateRefreshToken(refreshTokenToInvalidate);
 
-        //given(spy.getRefreshTokenByToken(token)).willReturn(optionalRefreshTokenToInvalidate);
-        //given(spy.validateRefreshToken(refreshTokenToInvalidate)).willReturn(true);
-
         // Act
-        var optionalInvalidatedToken = underTest.invalidateToken(token);
+        var optionalInvalidatedToken = spy.invalidateToken(token);
 
         // Assert
-        //verify(spy).getRefreshTokenByToken(token);
-        //verify(spy).validateRefreshToken(refreshTokenToInvalidate);
+        verify(spy).getRefreshTokenByToken(token);
+        verify(spy).validateRefreshToken(refreshTokenToInvalidate);
+        verify(refreshTokenToInvalidate).setValid(false);
 
         var invalidatedToken = optionalInvalidatedToken.get();
 
         assertThat(invalidatedToken).isSameAs(refreshTokenToInvalidate);
         assertThat(invalidatedToken.isValid()).isFalse();
+    }
+
+    @Test
+    void invalidateToken_givenNotExistingToken_shouldReturnOptionalEmpty() {
+        // Arrange
+        var token = MOCKED_UUID.toString();
+
+        var refreshTokenToInvalidate = spy(new RefreshToken());
+
+        var spy = spy(underTest);
+
+        doReturn(Optional.empty()).when(spy).getRefreshTokenByToken(token);
+
+        // Act
+        var optionalInvalidatedToken = spy.invalidateToken(token);
+
+        // Assert
+        verify(spy).getRefreshTokenByToken(token);
+        verify(spy, never()).validateRefreshToken(any());
+        verify(refreshTokenToInvalidate, never()).setValid(anyBoolean());
+
+        assertThat(optionalInvalidatedToken).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    void invalidateToken_givenInvalidToken_shouldReturnOptionalEmpty() {
+        // Arrange
+        var token = MOCKED_UUID.toString();
+
+        var refreshTokenToInvalidate = spy(new RefreshToken());
+        var optionalRefreshTokenToInvalidate = Optional.of(refreshTokenToInvalidate);
+
+        var spy = spy(underTest);
+
+        doReturn(optionalRefreshTokenToInvalidate).when(spy).getRefreshTokenByToken(token);
+        doReturn(false).when(spy).validateRefreshToken(refreshTokenToInvalidate);
+
+        // Act
+        var optionalInvalidatedToken = spy.invalidateToken(token);
+
+        // Assert
+        verify(spy).getRefreshTokenByToken(token);
+        verify(spy).validateRefreshToken(refreshTokenToInvalidate);
+        verify(refreshTokenToInvalidate, never()).setValid(anyBoolean());
+
+        assertThat(optionalInvalidatedToken).isEqualTo(Optional.empty());
     }
 }
