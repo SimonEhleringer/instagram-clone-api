@@ -6,17 +6,9 @@ import lombok.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import javax.validation.constraints.Pattern;
-import java.util.Objects;
 import java.util.Optional;
-
-// TODO: Write tests
 
 @Service
 @Transactional(readOnly = true)
@@ -27,8 +19,7 @@ public class UserService {
     private final ValidationService validationService;
 
     @Transactional
-    // TODO: Pattern message
-    public User createUser(@NonNull User userToCreate,@NonNull @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,50}$") String password) {
+    public User createUser(@NonNull User userToCreate,@NonNull @Pattern(regexp = UserConstants.PASSWORD__PATTERN_REGEXP) String password) {
         validationService.validate(userToCreate);
         validationService.validate(password);
 

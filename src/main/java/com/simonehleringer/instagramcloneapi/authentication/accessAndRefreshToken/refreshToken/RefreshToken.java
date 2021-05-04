@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RefreshToken {
     @Id
-    @Size(max = 36)
+    @Size(max = RefreshTokenConstants.TOKEN__SIZE_MAX)
     private String token;
 
     @Column(nullable = false)

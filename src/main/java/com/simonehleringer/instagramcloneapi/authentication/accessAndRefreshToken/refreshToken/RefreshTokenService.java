@@ -35,7 +35,6 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshTokenToCreate);
     }
 
-    // TODO: Write tests
     public Optional<RefreshToken> getRefreshTokenByToken(String token) {
         return refreshTokenRepository.findById(token);
     }

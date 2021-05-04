@@ -10,7 +10,6 @@ import javax.validation.Validator;
 @Service
 @AllArgsConstructor
 public class ValidationService {
-    // TODO: Write tests
     private final Validator validator;
 
     //Validation.buildDefaultValidatorFactory().getValidator();

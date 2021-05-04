@@ -11,15 +11,15 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.UUID;
 
+import static com.simonehleringer.instagramcloneapi.user.UserConstants.*;
+
 @Entity
 @Table(name = "appUser")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    // TODO: Validation, Constants for validation
-    // TODO: Validation messages
-    // TODO: Test validation
+    // TODO: Write tests for validation
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -28,29 +28,30 @@ public class User {
     )
     private UUID userId;
 
-    // TODO: Maybe NotNull -> Check what happens to API response if fullName ist null
-    @Size(max = 30)
+    @NotNull
+    @Size(max = FULL_NAME__SIZE_MAX)
     private String fullName;
 
     @NotNull
-    @Size(max = 30)
+    @Size(max = USERNAME__SIZE_MAX)
     // Only characters, numbers and underscore
-    @Pattern(regexp = "^[a-zA-Z0-9_]*$")
+    @Pattern(regexp = USERNAME__PATTERN_REGEXP)
     private String username;
 
-    // TODO: Check, how long database column can be
     @NotNull
     @Email
+    // Size is needed for database creation
+    @Size(max = EMAIL__SIZE_MAX)
     private String email;
 
-    @NotNull
-    @Size(max = 60)
+    // Column annotation, because in code password can be null
+    @Column(nullable = false)
+    @Size(max = ENCODED_PASSWORD__SIZE_MAX)
     private String encodedPassword;
 
-    // TODO: Maybe NotNull -> Check what happens to API response if fullName ist null
-    @Size(max = 150)
+    @NotNull
+    @Size(max = CHARACTERISTICS__SIZE_MAX)
     private String characteristics;
-
 
     // TODO: Validation -> Length
     private String profileImageLocation;
@@ -58,13 +59,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<RefreshToken> refreshTokens;
 
-    public User(@Size(max = 30) String fullName, @Size(max = 30) @Pattern(regexp = "^[a-zA-Z0-9_]*$") String username, @Email String email) {
+    public User(@NotNull @Size(max = FULL_NAME__SIZE_MAX) String fullName, @NotNull @Size(max = USERNAME__SIZE_MAX) @Pattern(regexp = USERNAME__PATTERN_REGEXP) String username, @NotNull @Email @Size(max = EMAIL__SIZE_MAX) String email, @NotNull @Size(max = CHARACTERISTICS__SIZE_MAX) String characteristics) {
         this.fullName = fullName;
         this.username = username;
         this.email = email;
+        this.characteristics = characteristics;
     }
 
-    public User(@Size(max = 30) String fullName, @Size(max = 30) @Pattern(regexp = "^[a-zA-Z0-9_]*$") String username, @Email String email, @Size(max = 60) String encodedPassword, @Size(max = 150) String characteristics, String profileImageLocation) {
+    public User(@Size(max = FULL_NAME__SIZE_MAX) String fullName, @Size(max = USERNAME__SIZE_MAX) @Pattern(regexp = USERNAME__PATTERN_REGEXP) String username, @Email String email, @Size(max = ENCODED_PASSWORD__SIZE_MAX) String encodedPassword, @Size(max = CHARACTERISTICS__SIZE_MAX) String characteristics, String profileImageLocation) {
         this.fullName = fullName;
         this.username = username;
         this.email = email;

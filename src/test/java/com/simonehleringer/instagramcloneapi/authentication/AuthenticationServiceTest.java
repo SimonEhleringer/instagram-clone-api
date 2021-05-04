@@ -45,11 +45,13 @@ class AuthenticationServiceTest {
         var username = "Username";
         var email = "Email";
         var password = "Password";
+        var characteristics = "";
 
         var user = new User(
             fullName,
             username,
-            email
+            email,
+            characteristics
         );
 
         var expectedAccessAndRefreshToken = new AccessAndRefreshToken(
@@ -75,6 +77,7 @@ class AuthenticationServiceTest {
         assertThat(capturedUser.getFullName()).isEqualTo(fullName);
         assertThat(capturedUser.getUsername()).isEqualTo(username);
         assertThat(capturedUser.getEmail()).isEqualTo(email);
+        assertThat(capturedUser.getCharacteristics()).isEqualTo(characteristics);
         assertThat(capturedPassword).isEqualTo(password);
 
         var createdUserArgumentCaptor = ArgumentCaptor.forClass(User.class);
@@ -184,7 +187,6 @@ class AuthenticationServiceTest {
     @Test
     void refreshAccessToken_givenValidToken_returnsNewAccessAndRefreshToken() {
         // Arrange
-        // TODO: Constant for GUID?
         var token = "11111111-1111-1111-1111-111111111111";
 
         var user = new User();
@@ -216,7 +218,6 @@ class AuthenticationServiceTest {
     @Test
     void refreshAccessToken_givenInvalidToken_throws() {
         // Arrange
-        // TODO: Constant for GUID?
         var token = "11111111-1111-1111-1111-111111111111";
 
         given(refreshTokenService.invalidateToken(token)).willReturn(Optional.empty());
@@ -234,7 +235,6 @@ class AuthenticationServiceTest {
     @Test
     void logout_invalidatesRefreshToken() {
         // Arrange
-        // TODO: Constant for GUID?
         var token = "11111111-1111-1111-1111-111111111111";
 
         // Act

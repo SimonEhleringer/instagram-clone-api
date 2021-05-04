@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.Duration;
 
-// TODO: Constants for prefix
 @ConfigurationProperties(prefix = "application.token.refreshtoken")
 @Configuration
 @Data

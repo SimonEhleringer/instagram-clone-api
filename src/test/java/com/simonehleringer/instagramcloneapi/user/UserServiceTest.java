@@ -48,7 +48,8 @@ class UserServiceTest {
         var user = new User(
                 "Firstname Lastname",
                 "Username",
-                "Firstname.Lastname@mail.com"
+                "Firstname.Lastname@mail.com",
+                ""
         );
 
         var password = "password";
@@ -81,7 +82,8 @@ class UserServiceTest {
         var user = new User(
                 "Firstname Lastname",
                 "Username",
-                "Firstname.Lastname@mail.com"
+                "Firstname.Lastname@mail.com",
+                ""
         );
 
         var password = "password";
@@ -112,7 +114,8 @@ class UserServiceTest {
         var user = new User(
                 "Firstname Lastname",
                 username,
-                "Firstname.Lastname@mail.com"
+                "Firstname.Lastname@mail.com",
+                ""
         );
 
         var password = "password";
