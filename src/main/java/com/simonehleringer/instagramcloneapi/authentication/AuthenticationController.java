@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("api/v1/authentication")
 @AllArgsConstructor
@@ -15,7 +17,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         var accessAndRefreshToken = authenticationService.login(
                 loginRequest.getUsernameOrEmail(),
                 loginRequest.getPassword()
@@ -28,7 +30,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
         var accessAndRefreshToken = authenticationService.register(
                 registerRequest.getFullName(),
                 registerRequest.getUsername(),
@@ -43,7 +45,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "/refreshAccessToken")
-    public ResponseEntity<?> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<?> refreshAccessToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         var accessAndRefreshToken = authenticationService.refreshAccessToken(
                 refreshTokenRequest.getRefreshToken()
         );
@@ -55,7 +57,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "/logout")
-    public ResponseEntity<?> logout(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<?> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         authenticationService.logout(
                 refreshTokenRequest.getRefreshToken()
         );

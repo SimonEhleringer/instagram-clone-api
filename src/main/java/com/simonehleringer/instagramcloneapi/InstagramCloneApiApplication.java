@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class InstagramCloneApiApplication {
 
+	// TODO: Reorganize folder structure of whole project
 	public static void main(String[] args) {
 		SpringApplication.run(InstagramCloneApiApplication.class, args);
 	}
