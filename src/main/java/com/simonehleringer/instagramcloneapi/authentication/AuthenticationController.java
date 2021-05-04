@@ -16,7 +16,6 @@ import javax.validation.Valid;
 @RequestMapping("api/v1/authentication")
 @AllArgsConstructor
 public class AuthenticationController {
-    // TODO: Write tests
     private final AuthenticationService authenticationService;
 
     private final AccessAndRefreshTokenResponseMapper accessAndRefreshTokenResponseMapper;

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 
+@SuppressWarnings("unused")
 @Service
 @AllArgsConstructor
 @Transactional(readOnly = true)

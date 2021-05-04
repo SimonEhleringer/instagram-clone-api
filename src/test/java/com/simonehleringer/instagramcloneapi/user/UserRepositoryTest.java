@@ -1,6 +1,5 @@
 package com.simonehleringer.instagramcloneapi.user;
 
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,8 +9,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 @DataJpaTest
 class UserRepositoryTest {
+    @SuppressWarnings("unused")
     @Autowired
     private UserRepository underTest;
 

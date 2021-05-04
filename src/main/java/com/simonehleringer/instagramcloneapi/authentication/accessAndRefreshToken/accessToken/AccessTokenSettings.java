@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
+@SuppressWarnings("unused")
 @ConfigurationProperties(prefix = "application.token.accesstoken")
 @Component
 @Data

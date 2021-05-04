@@ -17,8 +17,9 @@ import java.util.ArrayList;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // Return error response with all errors when controller level validation fails
+    @NonNull
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
         var errorResponse = new ErrorResponse(new ArrayList<>());
 
         for (ObjectError error : ex.getBindingResult().getAllErrors()) {
@@ -37,6 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     // Return error response with exception message
+    @NonNull
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
         ErrorResponse response = new ErrorResponse(new ArrayList<>());

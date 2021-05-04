@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings("unused")
 @Service
 @AllArgsConstructor
 public class AccessAndRefreshTokenService {

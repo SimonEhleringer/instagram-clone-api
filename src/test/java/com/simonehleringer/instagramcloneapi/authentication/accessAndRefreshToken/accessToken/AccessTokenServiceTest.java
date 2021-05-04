@@ -4,16 +4,12 @@ import com.simonehleringer.instagramcloneapi.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.persistence.Access;
-import javax.validation.constraints.Null;
 
 import java.nio.charset.StandardCharsets;
 import java.time.*;
@@ -22,9 +18,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,14 +35,12 @@ class AccessTokenServiceTest {
     @Mock
     private Clock clock;
 
-    private Clock fixedClock;
-
     @Test
     void generateNewAccessToken_givenUser_returnsNewAccessToken() {
         // Arrange
         var username = "Username";
 
-        fixedClock = Clock.fixed(
+        Clock fixedClock = Clock.fixed(
                 MOCKED_LOCAL_DATE_TIME.toInstant(ZoneOffset.UTC),
                 ZoneId.of("UTC")
         );
@@ -74,6 +66,7 @@ class AccessTokenServiceTest {
         Claims body;
 
         try (var uuidMockedStatic = Mockito.mockStatic(UUID.class)) {
+            //noinspection ResultOfMethodCallIgnored
             uuidMockedStatic.when(UUID::randomUUID).thenReturn(MOCKED_UUID);
 
             // Act

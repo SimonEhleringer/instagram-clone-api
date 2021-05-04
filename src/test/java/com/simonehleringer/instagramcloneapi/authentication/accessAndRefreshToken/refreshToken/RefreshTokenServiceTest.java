@@ -1,13 +1,10 @@
 package com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken;
 
 import com.simonehleringer.instagramcloneapi.user.User;
-import org.checkerframework.checker.nullness.Opt;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,11 +17,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 @ExtendWith(MockitoExtension.class)
 class RefreshTokenServiceTest {
     private final LocalDateTime MOCKED_LOCAL_DATE_TIME = LocalDateTime.of(2000, 1, 1, 1, 1, 1);
     private final UUID MOCKED_UUID = UUID.fromString("11111111-1111-1111-1111-111111111111");
-    private final String MOCKED_UUID_AS_STRING = MOCKED_UUID.toString();
 
     @InjectMocks
     private RefreshTokenService underTest;
@@ -40,6 +37,7 @@ class RefreshTokenServiceTest {
 
     private Clock fixedClock;
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void generateNewRefreshToken_givenUser_returnsNewRefreshToken() {
         try (MockedStatic<UUID> uuidMockedStatic = Mockito.mockStatic(UUID.class)) {
