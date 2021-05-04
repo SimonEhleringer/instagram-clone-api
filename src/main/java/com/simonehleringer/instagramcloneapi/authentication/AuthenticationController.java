@@ -16,6 +16,8 @@ public class AuthenticationController {
     // TODO: Write tests
     private final AuthenticationService authenticationService;
 
+    private final AccessAndRefreshTokenResponseMapper accessAndRefreshTokenResponseMapper;
+
     @PostMapping(path = "/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         var accessAndRefreshToken = authenticationService.login(
@@ -23,7 +25,7 @@ public class AuthenticationController {
                 loginRequest.getPassword()
         );
 
-        var response = AccessAndRefreshTokenResponseMapper.MAPPER
+        var response = accessAndRefreshTokenResponseMapper
                 .toAccessAndRefreshTokenResponse(accessAndRefreshToken);
 
         return ResponseEntity.ok(response);
@@ -38,7 +40,7 @@ public class AuthenticationController {
                 registerRequest.getPassword()
         );
 
-        var response = AccessAndRefreshTokenResponseMapper.MAPPER
+        var response = accessAndRefreshTokenResponseMapper
                 .toAccessAndRefreshTokenResponse(accessAndRefreshToken);
 
         return ResponseEntity.ok(response);
@@ -50,7 +52,7 @@ public class AuthenticationController {
                 refreshTokenRequest.getRefreshToken()
         );
 
-        var response = AccessAndRefreshTokenResponseMapper.MAPPER
+        var response = accessAndRefreshTokenResponseMapper
                 .toAccessAndRefreshTokenResponse(accessAndRefreshToken);
 
         return ResponseEntity.ok(response);

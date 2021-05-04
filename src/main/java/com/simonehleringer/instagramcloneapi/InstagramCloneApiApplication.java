@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 public class InstagramCloneApiApplication {
 
 	// TODO: Reorganize folder structure of whole project
+	// TODO: Fix warnings
 	public static void main(String[] args) {
 		SpringApplication.run(InstagramCloneApiApplication.class, args);
 	}

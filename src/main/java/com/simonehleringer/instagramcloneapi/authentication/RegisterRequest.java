@@ -1,5 +1,6 @@
 package com.simonehleringer.instagramcloneapi.authentication;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.*;
@@ -7,6 +8,7 @@ import javax.validation.constraints.*;
 import static com.simonehleringer.instagramcloneapi.user.UserConstants.*;
 
 @Data
+@AllArgsConstructor
 public class RegisterRequest {
     @NotBlank(message = "Es wurde keine E-Mail Adresse übermittelt.")
     @Email(message = "Die E-Mail Adresse ist ungültig.")
