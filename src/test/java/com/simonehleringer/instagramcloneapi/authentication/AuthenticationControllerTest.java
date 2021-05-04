@@ -1,11 +1,11 @@
 package com.simonehleringer.instagramcloneapi.authentication;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.simonehleringer.instagramcloneapi.ErrorResponse;
-import com.simonehleringer.instagramcloneapi.SecurityConfig;
+import com.simonehleringer.instagramcloneapi.common.ErrorResponse;
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.AccessAndRefreshToken;
-import org.checkerframework.checker.units.qual.A;
+import com.simonehleringer.instagramcloneapi.authentication.request.LoginRequest;
+import com.simonehleringer.instagramcloneapi.authentication.request.RefreshTokenRequest;
+import com.simonehleringer.instagramcloneapi.authentication.request.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,14 +15,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;

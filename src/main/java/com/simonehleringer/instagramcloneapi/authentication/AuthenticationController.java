@@ -1,5 +1,8 @@
 package com.simonehleringer.instagramcloneapi.authentication;
 
+import com.simonehleringer.instagramcloneapi.authentication.request.LoginRequest;
+import com.simonehleringer.instagramcloneapi.authentication.request.RefreshTokenRequest;
+import com.simonehleringer.instagramcloneapi.authentication.request.RegisterRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

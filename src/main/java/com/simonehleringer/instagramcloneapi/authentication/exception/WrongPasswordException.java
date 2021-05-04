@@ -1,4 +1,4 @@
-package com.simonehleringer.instagramcloneapi.authentication;
+package com.simonehleringer.instagramcloneapi.authentication.exception;
 
 public class WrongPasswordException extends RuntimeException {
     public WrongPasswordException() {

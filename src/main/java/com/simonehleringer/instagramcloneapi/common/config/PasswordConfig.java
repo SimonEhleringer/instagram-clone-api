@@ -1,4 +1,4 @@
-package com.simonehleringer.instagramcloneapi;
+package com.simonehleringer.instagramcloneapi.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

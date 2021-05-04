@@ -1,5 +1,6 @@
-package com.simonehleringer.instagramcloneapi;
+package com.simonehleringer.instagramcloneapi.common;
 
+import com.simonehleringer.instagramcloneapi.common.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

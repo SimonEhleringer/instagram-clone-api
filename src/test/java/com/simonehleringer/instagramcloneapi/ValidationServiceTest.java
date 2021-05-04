@@ -1,6 +1,6 @@
 package com.simonehleringer.instagramcloneapi;
 
-import org.hibernate.validator.engine.HibernateConstraintViolation;
+import com.simonehleringer.instagramcloneapi.common.ValidationService;
 import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,6 @@ import javax.validation.Validator;
 import java.util.HashSet;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 

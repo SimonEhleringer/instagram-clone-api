@@ -1,4 +1,4 @@
-package com.simonehleringer.instagramcloneapi;
+package com.simonehleringer.instagramcloneapi.common;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

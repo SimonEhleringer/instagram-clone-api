@@ -1,4 +1,4 @@
-package com.simonehleringer.instagramcloneapi.authentication;
+package com.simonehleringer.instagramcloneapi.authentication.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

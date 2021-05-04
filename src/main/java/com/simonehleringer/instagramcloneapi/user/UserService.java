@@ -1,6 +1,6 @@
 package com.simonehleringer.instagramcloneapi.user;
 
-import com.simonehleringer.instagramcloneapi.ValidationService;
+import com.simonehleringer.instagramcloneapi.common.ValidationService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;

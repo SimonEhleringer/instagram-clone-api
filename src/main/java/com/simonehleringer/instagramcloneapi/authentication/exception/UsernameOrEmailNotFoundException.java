@@ -1,4 +1,4 @@
-package com.simonehleringer.instagramcloneapi.authentication;
+package com.simonehleringer.instagramcloneapi.authentication.exception;
 
 public class UsernameOrEmailNotFoundException extends RuntimeException {
     public UsernameOrEmailNotFoundException() {

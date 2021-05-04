@@ -4,6 +4,9 @@ import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToke
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.AccessAndRefreshTokenService;
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken.RefreshToken;
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken.RefreshTokenService;
+import com.simonehleringer.instagramcloneapi.authentication.exception.RefreshTokenIsInvalidException;
+import com.simonehleringer.instagramcloneapi.authentication.exception.UsernameOrEmailNotFoundException;
+import com.simonehleringer.instagramcloneapi.authentication.exception.WrongPasswordException;
 import com.simonehleringer.instagramcloneapi.user.User;
 import com.simonehleringer.instagramcloneapi.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -17,7 +20,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
