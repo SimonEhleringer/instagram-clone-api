@@ -19,10 +19,10 @@ public class RegisterRequest {
     @NotBlank(message = "Es wurde kein Benutzername übermittelt.")
     @Size(max = USERNAME__SIZE_MAX, message = "Der Benutzername darf höchstens " + USERNAME__SIZE_MAX + " Zeichen lang sein.")
     // Only characters, numbers and underscore
-    @Pattern(regexp = USERNAME__PATTERN_REGEXP)
+    @Pattern(regexp = USERNAME__PATTERN_REGEXP, message = "Der Benutzername darf nur Groß- und Kleinbuchstaben sowie den Unterstrich enthalten.")
     private String username;
 
-    @NotBlank(message = "Es wurde kein Passwort übermittelt.")
+    @NotNull(message = "Es wurde kein Passwort übermittelt.")
     @Pattern(regexp = PASSWORD__PATTERN_REGEXP, message = "Das Passwort muss zwischen 6 und 50 Zeichen lang sein, einen Groß- und Kleinbuchstaben sowie eine Zahl und ein Sonderzeichen enthalten.")
     private String password;
 }
