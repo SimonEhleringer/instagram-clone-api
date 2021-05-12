@@ -38,8 +38,6 @@ class AccessTokenServiceTest {
     @Test
     void generateNewAccessToken_givenUser_returnsNewAccessToken() {
         // Arrange
-        var username = "Username";
-
         Clock fixedClock = Clock.fixed(
                 MOCKED_LOCAL_DATE_TIME.toInstant(ZoneOffset.UTC),
                 ZoneId.of("UTC")
@@ -50,7 +48,7 @@ class AccessTokenServiceTest {
         var user = new User(
                 MOCKED_UUID,
                 "",
-                username,
+                "",
                 "",
                 "",
                 "",
@@ -86,8 +84,7 @@ class AccessTokenServiceTest {
 
         // Assert
         assertThat(UUID.fromString(body.getId())).isEqualTo(MOCKED_UUID);
-        assertThat(body.getSubject()).isEqualTo(username);
-        assertThat(UUID.fromString(body.get("userId").toString())).isEqualTo(MOCKED_UUID);
+        assertThat(body.getSubject()).isEqualTo(MOCKED_UUID.toString());
         assertThat(LocalDateTime.ofInstant(body.getExpiration().toInstant(), ZoneId.of("UTC")))
                 .isEqualTo(MOCKED_LOCAL_DATE_TIME.plusMinutes(lifeTime.toMinutes()));
     }
