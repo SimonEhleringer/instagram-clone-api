@@ -1,6 +1,7 @@
 package com.simonehleringer.instagramcloneapi.user;
 
 import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToken.refreshToken.RefreshToken;
+import com.simonehleringer.instagramcloneapi.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -58,6 +59,16 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<RefreshToken> refreshTokens;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="Follow", joinColumns = {@JoinColumn(name="followerId")}, inverseJoinColumns = {@JoinColumn(name = "followedId")})
+    private List<User> followers;
+
+    @ManyToMany(mappedBy = "followers", cascade = CascadeType.ALL)
+    private List<User> followed;
 
     public User(@NotNull @Size(max = FULL_NAME__SIZE_MAX) String fullName, @NotNull @Size(max = USERNAME__SIZE_MAX) @Pattern(regexp = USERNAME__PATTERN_REGEXP) String username, @NotNull @Email @Size(max = EMAIL__SIZE_MAX) String email, @NotNull @Size(max = CHARACTERISTICS__SIZE_MAX) String characteristics) {
         this.fullName = fullName;
