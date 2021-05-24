@@ -6,6 +6,7 @@ import com.simonehleringer.instagramcloneapi.authentication.accessAndRefreshToke
 import com.simonehleringer.instagramcloneapi.authentication.request.LoginRequest;
 import com.simonehleringer.instagramcloneapi.authentication.request.RefreshTokenRequest;
 import com.simonehleringer.instagramcloneapi.authentication.request.RegisterRequest;
+import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationEntryPoint;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,6 +41,9 @@ class AuthenticationControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Test
     void login_givenValidBody_shouldReturnAccessAndRefreshToken() throws Exception {

@@ -1,8 +1,10 @@
 package com.simonehleringer.instagramcloneapi.user;
 
 import com.simonehleringer.instagramcloneapi.common.ValidationService;
+import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.UserPrincipal;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
