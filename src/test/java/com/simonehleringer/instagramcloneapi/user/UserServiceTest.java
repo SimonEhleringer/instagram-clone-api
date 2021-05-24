@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -235,5 +236,22 @@ class UserServiceTest {
         // Assert
         verify(passwordEncoder).matches(password, user.getEncodedPassword());
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void getById_shouldReturnUser() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var expected = Optional.of(new User());
+
+        given(userRepository.findById(userId)).willReturn(expected);
+
+        // Act
+        var actual = underTest.getById(userId);
+
+        // Assert
+        verify(userRepository).findById(userId);
+        assertThat(actual).isSameAs(expected);
     }
 }

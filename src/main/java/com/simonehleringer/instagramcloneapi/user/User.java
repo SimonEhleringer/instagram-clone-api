@@ -55,7 +55,7 @@ public class User {
     private String characteristics;
 
     // TODO: Validation -> Length
-    private String profileImageLocation;
+    private String publicProfileImageId;
 
     @OneToMany(mappedBy = "user")
     private List<RefreshToken> refreshTokens;
@@ -77,12 +77,12 @@ public class User {
         this.characteristics = characteristics;
     }
 
-    public User(@Size(max = FULL_NAME__SIZE_MAX) String fullName, @Size(max = USERNAME__SIZE_MAX) @Pattern(regexp = USERNAME__PATTERN_REGEXP) String username, @Email String email, @Size(max = ENCODED_PASSWORD__SIZE_MAX) String encodedPassword, @Size(max = CHARACTERISTICS__SIZE_MAX) String characteristics, String profileImageLocation) {
+    public User(@Size(max = FULL_NAME__SIZE_MAX) String fullName, @Size(max = USERNAME__SIZE_MAX) @Pattern(regexp = USERNAME__PATTERN_REGEXP) String username, @Email String email, @Size(max = ENCODED_PASSWORD__SIZE_MAX) String encodedPassword, @Size(max = CHARACTERISTICS__SIZE_MAX) String characteristics, String publicProfileImageId) {
         this.fullName = fullName;
         this.username = username;
         this.email = email;
         this.encodedPassword = encodedPassword;
         this.characteristics = characteristics;
-        this.profileImageLocation = profileImageLocation;
+        this.publicProfileImageId = publicProfileImageId;
     }
 }

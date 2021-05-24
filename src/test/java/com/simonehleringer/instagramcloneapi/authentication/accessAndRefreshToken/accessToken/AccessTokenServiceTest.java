@@ -4,6 +4,7 @@ import com.simonehleringer.instagramcloneapi.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -96,6 +98,39 @@ class AccessTokenServiceTest {
     void generateNewAccessToken_givenNullUser_throws() {
         assertThatThrownBy(() ->
                 underTest.generateNewAccessToken(null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void parseAccessToken_givenAccessToken_shouldReturnClaimsJws() {
+        // Arrange
+        var secret = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+        var jwtId = "11111111-1111-1111-1111-111111111111";
+        var subject = "22222222-2222-2222-2222-222222222222";
+
+        var accessToken = Jwts.builder()
+                .setSubject(subject)
+                .setId(jwtId)
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
+                .compact();
+
+        given(accessTokenSettings.getSecret()).willReturn(secret);
+
+        // Act
+        var claimsJws = underTest.parseAccessToken(accessToken);
+
+        // Assert
+        var body = claimsJws.getBody();
+
+        assertThat(body.getId()).isEqualTo(jwtId);
+        assertThat(body.getSubject()).isEqualTo(subject);
+    }
+
+    @Test
+    void parseAccessToken_givenNullAccessToken_shouldThrow() {
+        assertThatThrownBy(() ->
+                underTest.parseAccessToken(null))
                 .isInstanceOf(NullPointerException.class);
     }
 }

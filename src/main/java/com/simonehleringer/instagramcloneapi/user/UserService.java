@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Pattern;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,6 +47,10 @@ public class UserService {
 
     public boolean checkPassword(User user, String password) {
         return passwordEncoder.matches(password, user.getEncodedPassword());
+    }
+
+    public Optional<User> getById(UUID userId) {
+        return userRepository.findById(userId);
     }
 
 }
