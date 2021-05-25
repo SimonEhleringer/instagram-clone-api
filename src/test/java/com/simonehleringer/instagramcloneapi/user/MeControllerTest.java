@@ -1,28 +1,21 @@
 package com.simonehleringer.instagramcloneapi.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.simonehleringer.instagramcloneapi.WithMockAppUser;
+import com.simonehleringer.instagramcloneapi.testUtil.annotation.WithMockAppUser;
 import com.simonehleringer.instagramcloneapi.common.ControllerUtils;
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationEntryPoint;
-import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationProvider;
-import org.apache.coyote.http11.upgrade.UpgradeServletOutputStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithSecurityContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;

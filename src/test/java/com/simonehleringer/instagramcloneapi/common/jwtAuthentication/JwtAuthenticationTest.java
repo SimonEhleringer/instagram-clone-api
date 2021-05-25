@@ -1,4 +1,4 @@
-package com.simonehleringer.instagramcloneapi;
+package com.simonehleringer.instagramcloneapi.common.jwtAuthentication;
 
 import com.simonehleringer.instagramcloneapi.authentication.AccessAndRefreshTokenResponseMapper;
 import com.simonehleringer.instagramcloneapi.authentication.AuthenticationService;
@@ -31,6 +31,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,6 +65,51 @@ public class JwtAuthenticationTest {
         mockMvc.perform(
                 get("/api/v1/someUrlThatDoesNotExist")
                         .header(HttpHeaders.AUTHORIZATION, "bearer " + accessToken)
+        )
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void jwtAuthentication_givenInvalidJwt_shouldReturnUnauthorized() throws Exception {
+        // Arrange
+        given(accessTokenService.parseAccessToken(anyString())).willThrow(JwtException.class);
+
+        // Act
+        // Assert
+        mockMvc.perform(
+                get("/api/v1/someUrlThatDoesNotExist")
+                        .header(HttpHeaders.AUTHORIZATION, "bearer jwtToken")
+        )
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void jwtAuthentication_givenNoBearerToken_shouldReturnUnauthorized() throws Exception {
+        // Act
+        // Assert
+        mockMvc.perform(
+                get("/api/v1/someUrlThatDoesNotExist")
+                        .header(HttpHeaders.AUTHORIZATION, "jwtToken")
+        )
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void jwtAuthentication_givenNoAuthorizationHeader_shouldReturnUnauthorized() throws Exception {
+        // Act
+        // Assert
+        mockMvc.perform(
+                get("/api/v1/someUrlThatDoesNotExist")
+        )
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void jwtAuthentication_givenRequestToAuthenticationApiAndNoAuthorizationHeader_shouldNotReturnUnauthorized() throws Exception {
+        // Act
+        // Assert
+        mockMvc.perform(
+                get("/api/v1/authentication/someUrlThatDoesNotExist")
         )
                 .andExpect(status().isNotFound());
     }

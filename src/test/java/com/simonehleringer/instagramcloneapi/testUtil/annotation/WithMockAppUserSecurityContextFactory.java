@@ -1,4 +1,4 @@
-package com.simonehleringer.instagramcloneapi;
+package com.simonehleringer.instagramcloneapi.testUtil.annotation;
 
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationToken;
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.UserPrincipal;

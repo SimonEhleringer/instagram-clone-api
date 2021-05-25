@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    // TODO: Test that all filters work properly
+    // TODO: Test filters like FilterChainExceptionHandlingFilter and CorsFilter? -> Maybe not necessary
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

@@ -1,4 +1,4 @@
-package com.simonehleringer.instagramcloneapi;
+package com.simonehleringer.instagramcloneapi.testUtil.annotation;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 
