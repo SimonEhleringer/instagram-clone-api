@@ -64,7 +64,7 @@ public class User {
     private List<Post> posts;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="Follow", joinColumns = {@JoinColumn(name="followerId")}, inverseJoinColumns = {@JoinColumn(name = "followedId")})
+    @JoinTable(name="Follow", joinColumns = { @JoinColumn(name="followedId") }, inverseJoinColumns = { @JoinColumn(name = "followerId") })
     private List<User> followers;
 
     @ManyToMany(mappedBy = "followers", cascade = CascadeType.ALL)

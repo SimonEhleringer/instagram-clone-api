@@ -45,4 +45,42 @@ class UserResponseMapperTest {
         assertThat(userResponse.getFullName()).isEqualTo(fullName);
         assertThat(userResponse.getPublicProfileImageId()).isEqualTo(publicProfileImageId);
     }
+
+    @Test
+    void toUserResponseList_shouldMapProperly() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var fullName = "fullName";
+        var username = "username";
+        var publicProfileImageId = "publicProfileImageId";
+
+        var user = new User(
+                userId,
+                fullName,
+                username,
+                "email",
+                "encodedPassword",
+                "characteristics",
+                publicProfileImageId,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        var users = new ArrayList<User>();
+        users.add(user);
+
+        // Act
+        var userResponses = underTest.toUserResponseList(users);
+
+        // Assert
+        assertThat(userResponses.size()).isEqualTo(1);
+
+        var userResponse = userResponses.get(0);
+        assertThat(userResponse.getUserId()).isEqualTo(userId);
+        assertThat(userResponse.getUsername()).isEqualTo(username);
+        assertThat(userResponse.getFullName()).isEqualTo(fullName);
+        assertThat(userResponse.getPublicProfileImageId()).isEqualTo(publicProfileImageId);
+    }
 }

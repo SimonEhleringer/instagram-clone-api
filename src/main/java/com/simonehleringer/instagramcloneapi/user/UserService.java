@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Pattern;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,6 +56,27 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    public Optional
+    @Transactional
+    public Optional<List<User>> addFollow(UUID followerId, UUID followedId) {
+        var optionalFollower = userRepository.findById(followerId);
+
+        if (optionalFollower.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var follower = optionalFollower.get();
+
+        var optionalFollowed = userRepository.findById(followedId);
+
+        if (optionalFollowed.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var followed = optionalFollowed.get();
+
+        followed.getFollowers().add(follower);
+
+        return Optional.of(follower.getFollowed());
+    }
 
 }

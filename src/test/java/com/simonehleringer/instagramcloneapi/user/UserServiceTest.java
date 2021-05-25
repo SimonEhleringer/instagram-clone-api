@@ -10,7 +10,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Commit;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -253,5 +255,65 @@ class UserServiceTest {
         // Assert
         verify(userRepository).findById(userId);
         assertThat(actual).isSameAs(expected);
+    }
+
+    @Test
+    void addFollow_givenExistingFollowerIdAndFollowedId_shouldReturnNewFollowerListOfFollowed() {
+        // Arrange
+        var followedId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var followerId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        var followed = new User();
+        var followedFollowers = new ArrayList<User>();
+        followed.setFollowers(followedFollowers);
+
+        var follower = new User();
+        var followersFollowed = new ArrayList<User>();
+        follower.setFollowed(followersFollowed);
+
+        given(userRepository.findById(followedId)).willReturn(Optional.of(followed));
+        given(userRepository.findById(followerId)).willReturn(Optional.of(follower));
+
+        // Act
+        var optionalFollowed = underTest.addFollow(followerId, followedId);
+
+        // Assert
+        var followedList = optionalFollowed.get();
+
+        assertThat(followedFollowers.get(0)).isSameAs(follower);
+        assertThat(followedList).isSameAs(followersFollowed);
+    }
+
+    @Test
+    void addFollow_givenExistingFollowerIdButNonExistingFollowedId_shouldReturnOptionalEmpty() {
+        // Arrange
+        var followedId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var followerId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        var follower = new User();
+
+        given(userRepository.findById(followerId)).willReturn(Optional.of(follower));
+        given(userRepository.findById(followedId)).willReturn(Optional.empty());
+
+        // Act
+        var optionalFollowed = underTest.addFollow(followerId, followedId);
+
+        // Assert
+        assertThat(optionalFollowed).isEmpty();
+    }
+
+    @Test
+    void addFollow_givenNonExistingFollowerId_shouldReturnOptionalEmpty() {
+        // Arrange
+        var followedId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var followerId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        given(userRepository.findById(followerId)).willReturn(Optional.empty());
+
+        // Act
+        var optionalFollowed = underTest.addFollow(followerId, followedId);
+
+        // Assert
+        assertThat(optionalFollowed).isEmpty();
     }
 }
