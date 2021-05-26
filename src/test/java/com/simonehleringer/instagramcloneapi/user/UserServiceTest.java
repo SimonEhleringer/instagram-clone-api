@@ -281,7 +281,7 @@ class UserServiceTest {
         var followedList = optionalFollowed.get();
 
         assertThat(followedFollowers.get(0)).isSameAs(follower);
-        assertThat(followedList).isSameAs(followersFollowed);
+        assertThat(followedList.get(0)).isSameAs(followed);
     }
 
     @Test
@@ -291,6 +291,7 @@ class UserServiceTest {
         var followerId = UUID.fromString("22222222-2222-2222-2222-222222222222");
 
         var follower = new User();
+        follower.setFollowed(new ArrayList<>());
 
         given(userRepository.findById(followerId)).willReturn(Optional.of(follower));
         given(userRepository.findById(followedId)).willReturn(Optional.empty());
@@ -315,5 +316,42 @@ class UserServiceTest {
 
         // Assert
         assertThat(optionalFollowed).isEmpty();
+    }
+
+    @Test
+    void addFollow_givenEqualFollowerIdAndFollowedId_shouldThrow() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        // Act
+        // Assert
+        assertThatThrownBy(() ->
+                underTest.addFollow(userId, userId))
+                .isInstanceOf(CanNotAddFollowException.class);
+    }
+
+    @Test
+    void addFollow_givenAlreadyFollowedUser_shouldThrow() {
+        // Arrange
+        var followedId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var followerId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        var followed = new User();
+        followed.setUserId(followedId);
+
+        var followedList = new ArrayList<User>();
+        followedList.add(followed);
+
+        var follower = new User();
+        follower.setUserId(followerId);
+        follower.setFollowed(followedList);
+
+        given(userRepository.findById(followerId)).willReturn(Optional.of(follower));
+
+        // Act
+        // Assert
+        assertThatThrownBy(() ->
+                underTest.addFollow(followerId, followedId))
+                .isInstanceOf(CanNotAddFollowException.class);
     }
 }

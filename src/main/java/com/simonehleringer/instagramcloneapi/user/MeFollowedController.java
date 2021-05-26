@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// TODO: No doubled follows
-// TODO: Don't follow self
-// TODO: Add tests
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/me/followed")
@@ -18,9 +16,9 @@ public class MeFollowedController {
     private final UserService userService;
     private final FollowedResponseMapper followedResponseMapper;
 
-    @PostMapping
-    public ResponseEntity<?> add(@RequestBody UserIdRequest request) {
-        var optionalNewFollowed = userService.addFollow(ControllerUtils.getLoggedInUserId(), request.getUserId());
+    @PostMapping(path = "{followedId}")
+    public ResponseEntity<?> add(@PathVariable UUID followedId) {
+        var optionalNewFollowed = userService.addFollow(ControllerUtils.getLoggedInUserId(), followedId);
 
         if (optionalNewFollowed.isEmpty()) {
             return ResponseEntity.notFound().build();

@@ -60,12 +60,6 @@ class MeFollowedControllerTest {
         var username = "username";
         var publicProfileImageId = "publicProfileImageId";
 
-        var request = new UserIdRequest(
-                followedId
-        );
-
-        var requestAsJson = objectMapper.writeValueAsString(request);
-
         var userResponse = new UserResponse(
                 followedId,
                 fullName,
@@ -91,10 +85,7 @@ class MeFollowedControllerTest {
         // Act
         // Assert
         mockMvc.perform(
-                post("/api/v1/me/followed")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestAsJson)
+                post("/api/v1/me/followed/" + followedId.toString())
         )
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponseAsJson));
@@ -108,18 +99,12 @@ class MeFollowedControllerTest {
         // Arrange
         var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
 
-        var request = new UserIdRequest(followedId);
-        var requestAsJson = objectMapper.writeValueAsString(request);
-
         given(userService.addFollow(loggedInUserId, followedId)).willReturn(Optional.empty());
 
         // Act
         // Assert
         mockMvc.perform(
-                post("/api/v1/me/followed")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestAsJson)
+                post("/api/v1/me/followed" + followedId.toString())
         )
                 .andExpect(status().isNotFound());
     }

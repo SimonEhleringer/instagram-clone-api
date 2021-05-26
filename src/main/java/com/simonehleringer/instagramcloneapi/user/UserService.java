@@ -58,6 +58,10 @@ public class UserService {
 
     @Transactional
     public Optional<List<User>> addFollow(UUID followerId, UUID followedId) {
+        if (followerId.equals(followedId)) {
+            throw new CanNotAddFollowException("Du kannst dir selbst nicht folgen.");
+        }
+
         var optionalFollower = userRepository.findById(followerId);
 
         if (optionalFollower.isEmpty()) {
@@ -65,6 +69,13 @@ public class UserService {
         }
 
         var follower = optionalFollower.get();
+
+        var doesFollowAlreadyExist = follower.getFollowed().stream()
+                .anyMatch((user) -> user.getUserId().equals(followedId));
+
+        if (doesFollowAlreadyExist) {
+            throw new CanNotAddFollowException("Du folgst diesem Benutzer bereits.");
+        }
 
         var optionalFollowed = userRepository.findById(followedId);
 
@@ -75,6 +86,7 @@ public class UserService {
         var followed = optionalFollowed.get();
 
         followed.getFollowers().add(follower);
+        follower.getFollowed().add(followed);
 
         return Optional.of(follower.getFollowed());
     }
