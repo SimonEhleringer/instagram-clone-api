@@ -91,4 +91,45 @@ public class UserService {
         return Optional.of(follower.getFollowed());
     }
 
+    public Optional<List<User>> getUsersFollowed(UUID userId) {
+        var optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var user = optionalUser.get();
+
+        return Optional.of(user.getFollowed());
+    }
+
+    @Transactional
+    public Optional<List<User>> removeFollow(UUID followerId, UUID followedId) {
+        var optionalFollower = userRepository.findById(followerId);
+
+        if (optionalFollower.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var follower = optionalFollower.get();
+
+        var optionalFollowed = userRepository.findById(followedId);
+
+        if (optionalFollowed.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var followed = optionalFollowed.get();
+
+        var hasBeenRemoved = follower.getFollowed().remove(followed);
+
+        if (!hasBeenRemoved) {
+            return Optional.empty();
+        }
+
+        followed.getFollowers().remove(follower);
+
+        return Optional.of(follower.getFollowed());
+    }
+
 }

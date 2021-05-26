@@ -31,6 +31,33 @@ public class MeFollowedController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping
-//    public Response
+    @GetMapping
+    public ResponseEntity<?> getAll() {
+        var optionalFollowed = userService.getUsersFollowed(ControllerUtils.getLoggedInUserId());
+
+        if (optionalFollowed.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var followed = optionalFollowed.get();
+
+        var response = followedResponseMapper.toFollowedResponse(followed);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping(path = "{followedId}")
+    public ResponseEntity<?> delete(@PathVariable UUID followedId) {
+        var optionalNewFollowed = userService.removeFollow(ControllerUtils.getLoggedInUserId(), followedId);
+
+        if (optionalNewFollowed.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var newFollowed = optionalNewFollowed.get();
+
+        var response = followedResponseMapper.toFollowedResponse(newFollowed);
+
+        return ResponseEntity.ok(response);
+    }
 }

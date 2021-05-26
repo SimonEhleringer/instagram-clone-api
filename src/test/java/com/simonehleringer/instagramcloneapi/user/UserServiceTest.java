@@ -354,4 +354,190 @@ class UserServiceTest {
                 underTest.addFollow(followerId, followedId))
                 .isInstanceOf(CanNotAddFollowException.class);
     }
+
+    @Test
+    void getUsersFollowed_givenExistingUser_shouldReturnUsersFollowed() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var followed = new User();
+        var followedList = new ArrayList<User>();
+        followedList.add(followed);
+
+        var user = new User(
+            userId,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>(),
+            followedList
+        );
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+        // Act
+        var optionalFollowedList = underTest.getUsersFollowed(userId);
+
+        // Assert
+        var actualFollowedList = optionalFollowedList.get();
+
+        assertThat(actualFollowedList.size()).isEqualTo(1);
+        assertThat(actualFollowedList.get(0)).isSameAs(followed);
+    }
+
+    @Test
+    void getUsersFollowed_givenNotExistingUser_shouldReturnEmptyOptional() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
+        // Act
+        var optionalFollowedList = underTest.getUsersFollowed(userId);
+
+        // Assert
+        assertThat(optionalFollowedList).isEmpty();
+    }
+
+    @Test
+    void removeFollow_givenExistingFollowerAndFollowed_shouldRemoveFollow() {
+        // Arrange
+        var followerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        var follower = new User(
+                followerId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        var followed = new User(
+                followedId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        follower.getFollowed().add(followed);
+        followed.getFollowers().add(follower);
+
+        given(userRepository.findById(followerId)).willReturn(Optional.of(follower));
+        given(userRepository.findById(followedId)).willReturn(Optional.of(followed));
+
+        // Act
+        var optionalNewFollowedList = underTest.removeFollow(followerId, followedId);
+
+        // Assert
+        var newFollowedList = optionalNewFollowedList.get();
+
+        assertThat(newFollowedList.size()).isEqualTo(0);
+    }
+
+    @Test
+    void removeFollow_givenFollowedThatWasNotFollowedByFollower_shouldReturnEmptyOptional() {
+        // Arrange
+        var followerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        var follower = new User(
+                followerId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        var followed = new User(
+                followedId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        given(userRepository.findById(followerId)).willReturn(Optional.of(follower));
+        given(userRepository.findById(followedId)).willReturn(Optional.of(followed));
+
+        // Act
+        var optionalNewFollowedList = underTest.removeFollow(followerId, followedId);
+
+        // Assert
+        assertThat(optionalNewFollowedList).isEmpty();
+    }
+
+    @Test
+    void removeFollow_givenExistingFollowerButNotExistingFollowed_shouldReturnEmptyOptional() {
+        // Arrange
+        var followerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        var follower = new User(
+                followerId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        given(userRepository.findById(followerId)).willReturn(Optional.of(follower));
+        given(userRepository.findById(followedId)).willReturn(Optional.empty());
+
+        // Act
+        var optionalNewFollowedList = underTest.removeFollow(followerId, followedId);
+
+        // Assert
+        assertThat(optionalNewFollowedList).isEmpty();
+    }
+
+    @Test
+    void removeFollow_givenNotExistingFollower_shouldReturnEmptyOptional() {
+        // Arrange
+        var followerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        given(userRepository.findById(followerId)).willReturn(Optional.empty());
+
+        // Act
+        var optionalNewFollowedList = underTest.removeFollow(followerId, followedId);
+
+        // Assert
+        assertThat(optionalNewFollowedList).isEmpty();
+    }
 }
