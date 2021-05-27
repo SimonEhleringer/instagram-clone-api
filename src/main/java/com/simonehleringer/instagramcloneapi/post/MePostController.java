@@ -21,7 +21,7 @@ public class MePostController {
     public ResponseEntity<?> add(@RequestBody PostRequest request) {
         var optionalCreatedPost = postService.createPost(
                 request.getText(),
-                request.getImageBase64UrlEncoded(),
+                request.getImageDataUri(),
                 ControllerUtils.getLoggedInUserId()
         );
 
@@ -34,6 +34,8 @@ public class MePostController {
 
         var response = postResponseMapper.toPostResponse(createdPost);
 
-        return ResponseEntity.
+        return ResponseEntity
+                .created(ControllerUtils.getLocationHeader(response.getPostId()))
+                .body(response);
     }
 }

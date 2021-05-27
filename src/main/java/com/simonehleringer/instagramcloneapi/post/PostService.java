@@ -26,16 +26,12 @@ public class PostService {
     private final UserService userService;
     private final Clock clock;
 
-    // TODO: Check if userId should be @NonNull
-
     @Transactional
-    public Optional<Post> createPost(String text, @NonNull String imageBase64UrlEncoded, UUID userId) {
+    public Optional<Post> createPost(String text, String imageDataUri, UUID userId) {
         var postToCreate = new Post();
         postToCreate.setText(text);
 
-        validationService.validate(postToCreate);
-
-        var publicImageId = cloudinaryService.uploadImage(imageBase64UrlEncoded);
+        var publicImageId = cloudinaryService.uploadImage(imageDataUri);
 
         postToCreate.setPublicImageId(publicImageId);
 
@@ -49,6 +45,8 @@ public class PostService {
 
         postToCreate.setUser(user);
         postToCreate.setCreationTime(LocalDateTime.now(clock));
+
+        validationService.validate(postToCreate);
 
         var createdPost = postRepository.save(postToCreate);
 

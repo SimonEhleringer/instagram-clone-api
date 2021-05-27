@@ -14,7 +14,7 @@ import static com.simonehleringer.instagramcloneapi.post.PostConstants.TEXT__SIZ
 @NoArgsConstructor
 public class PostRequest {
     @NotNull
-    private String imageBase64UrlEncoded;
+    private String imageDataUri;
 
     @Size(max = TEXT__SIZE_MAX)
     private String text;

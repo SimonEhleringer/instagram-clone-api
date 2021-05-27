@@ -22,16 +22,17 @@ public class Post {
     private Integer postId;
 
     // TODO: Validation -> length
-    @Column(nullable = false)
+    @NotNull
     private String publicImageId;
 
     @Size(max = TEXT__SIZE_MAX)
     private String text;
 
-    @Column(nullable = false)
+    @NotNull
     private LocalDateTime creationTime;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
+    @NotNull
     private User user;
 }

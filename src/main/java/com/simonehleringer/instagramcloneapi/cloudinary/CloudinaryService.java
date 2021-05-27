@@ -13,11 +13,11 @@ public class CloudinaryService {
     private final Cloudinary cloudinary;
 
     // TODO: Add validation
-    public String uploadImage(String imageBase64UrlEncoded) {
+    public String uploadImage(String imageDataUri) {
         var params = ObjectUtils.asMap("resource_type", "auto");
 
         try {
-            var result = cloudinary.uploader().upload(imageBase64UrlEncoded, params);
+            var result = cloudinary.uploader().upload(imageDataUri, params);
 
             var publicId = (String) result.get("public_id");
 
