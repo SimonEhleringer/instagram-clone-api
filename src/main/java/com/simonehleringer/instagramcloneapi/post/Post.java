@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+import static com.simonehleringer.instagramcloneapi.post.PostConstants.PUBLIC_IMAGE_ID__SIZE_MAX;
 import static com.simonehleringer.instagramcloneapi.post.PostConstants.TEXT__SIZE_MAX;
 
 @Entity
@@ -21,8 +22,8 @@ public class Post {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer postId;
 
-    // TODO: Validation -> length
-    @NotNull
+    @Size(max = PUBLIC_IMAGE_ID__SIZE_MAX)
+    @Column(nullable = false)
     private String publicImageId;
 
     @Size(max = TEXT__SIZE_MAX)

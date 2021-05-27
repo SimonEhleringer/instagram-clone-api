@@ -6,15 +6,20 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class CloudinaryService {
     private final Cloudinary cloudinary;
 
-    // TODO: Add validation
-    public String uploadImage(String imageDataUri) {
-        var params = ObjectUtils.asMap("resource_type", "auto");
+    public String uploadImage(String imageDataUri, ImageType imageType, UUID userId) {
+        var params = ObjectUtils.asMap(
+                "resource_type", "auto",
+                "folder", "instagram-clone/" + imageType.getFolderName() + "/" + userId.toString(),
+                "allowed_formats", new String[] { "jpg", "jpeg", "png" }
+        );
 
         try {
             var result = cloudinary.uploader().upload(imageDataUri, params);

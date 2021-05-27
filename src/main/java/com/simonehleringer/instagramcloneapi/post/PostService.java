@@ -1,6 +1,7 @@
 package com.simonehleringer.instagramcloneapi.post;
 
 import com.simonehleringer.instagramcloneapi.cloudinary.CloudinaryService;
+import com.simonehleringer.instagramcloneapi.cloudinary.ImageType;
 import com.simonehleringer.instagramcloneapi.common.ValidationService;
 import com.simonehleringer.instagramcloneapi.user.UserService;
 import lombok.AllArgsConstructor;
@@ -31,10 +32,6 @@ public class PostService {
         var postToCreate = new Post();
         postToCreate.setText(text);
 
-        var publicImageId = cloudinaryService.uploadImage(imageDataUri);
-
-        postToCreate.setPublicImageId(publicImageId);
-
         var optionalUser = userService.getById(userId);
 
         if (optionalUser.isEmpty()) {
@@ -47,6 +44,10 @@ public class PostService {
         postToCreate.setCreationTime(LocalDateTime.now(clock));
 
         validationService.validate(postToCreate);
+
+        var publicImageId = cloudinaryService.uploadImage(imageDataUri, ImageType.POST, userId);
+
+        postToCreate.setPublicImageId(publicImageId);
 
         var createdPost = postRepository.save(postToCreate);
 
