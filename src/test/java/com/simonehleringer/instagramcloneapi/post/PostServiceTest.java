@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.validation.ConstraintViolationException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,11 +23,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PostServiceTest {
@@ -115,7 +116,6 @@ class PostServiceTest {
         assertThat(capturedPost.getUser()).isSameAs(user);
 
         verify(cloudinaryService).uploadImage(imageDataUri, ImageType.POST, userId);
-        verify(validationService).validate(any());
     }
 
     @Test
@@ -130,8 +130,97 @@ class PostServiceTest {
 
         // Assert
         assertThat(optionalCreatedPost).isEmpty();
+
+        verify(cloudinaryService, never()).uploadImage(anyString(), any(), any());
+        verify(postRepository, never()).save(any());
     }
 
     @Test
-    void createPost_givenInvalidParameters_should
+    void createPost_givenInvalidParameters_shouldThrowAndNotUploadImageToCloudinary() {
+        // Arrange
+        fixedClock = Clock.fixed(
+                MOCKED_LOCAL_DATE_TIME.toInstant(ZoneOffset.UTC),
+                ZoneId.of("UTC")
+        );
+
+        given(clock.instant()).willReturn(fixedClock.instant());
+        given(clock.getZone()).willReturn(fixedClock.getZone());
+
+        var text = "text";
+        var imageDataUri = "imageDataUri";
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var user = new User(
+                userId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        given(userService.getById(userId)).willReturn(Optional.of(user));
+        doThrow(ConstraintViolationException.class).when(validationService).validate(any());
+
+        // Act
+        // Assert
+        assertThatThrownBy(() ->
+                underTest.createPost(text, imageDataUri, userId));
+
+        verify(cloudinaryService, never()).uploadImage(anyString(), any(), any());
+        verify(postRepository, never()).save(any());
+    }
+
+    @Test
+    void createPost_shouldValidatePostToCreateBeforeUploadingImageToCloudinary() {
+        // Arrange
+        fixedClock = Clock.fixed(
+                MOCKED_LOCAL_DATE_TIME.toInstant(ZoneOffset.UTC),
+                ZoneId.of("UTC")
+        );
+
+        given(clock.instant()).willReturn(fixedClock.instant());
+        given(clock.getZone()).willReturn(fixedClock.getZone());
+
+        var text = "text";
+        var imageDataUri = "imageDataUri";
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var user = new User(
+                userId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        given(userService.getById(userId)).willReturn(Optional.of(user));
+        given(postRepository.save(any())).willReturn(new Post());
+
+        // Act
+        underTest.createPost(text, imageDataUri, userId);
+
+        // Assert
+        var createdPostCaptor = ArgumentCaptor.forClass(Post.class);
+
+        verify(validationService).validate(createdPostCaptor.capture());
+
+        var capturedCreatedPost = createdPostCaptor.getValue();
+
+        assertThat(capturedCreatedPost.getText()).isEqualTo(text);
+        assertThat(capturedCreatedPost.getUser()).isEqualTo(user);
+        assertThat(capturedCreatedPost.getCreationTime()).isEqualTo(MOCKED_LOCAL_DATE_TIME);
+        assertThat(capturedCreatedPost.getPublicImageId()).isNull();
+    }
 }
