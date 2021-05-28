@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("api/v1/me/posts")
 @SecurityRequirement(name = "bearerAuth")
@@ -18,17 +20,12 @@ public class MePostController {
     private final PostResponseMapper postResponseMapper;
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody PostRequest request) {
+    public ResponseEntity<?> add(@Valid @RequestBody PostRequest request) {
         var optionalCreatedPost = postService.createPost(
                 request.getText(),
                 request.getImageDataUri(),
                 ControllerUtils.getLoggedInUserId()
         );
-
-        // TODO: Maybe no if check?
-        if (optionalCreatedPost.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
 
         var createdPost = optionalCreatedPost.get();
 

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.Size;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -52,5 +53,9 @@ public class PostService {
         var createdPost = postRepository.save(postToCreate);
 
         return Optional.of(createdPost);
+    }
+
+    public List<Post> getAllUsersPosts(UUID userId) {
+
     }
 }
