@@ -223,4 +223,50 @@ class PostServiceTest {
         assertThat(capturedCreatedPost.getCreationTime()).isEqualTo(MOCKED_LOCAL_DATE_TIME);
         assertThat(capturedCreatedPost.getPublicImageId()).isNull();
     }
+
+    @Test
+    void getAllUsersPosts_givenExistingUser_shouldReturnPosts() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var user = new User(
+            userId,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>()
+        );
+
+        var expectedPosts = new ArrayList<Post>();
+
+        given(userService.getById(userId)).willReturn(Optional.of(user));
+        given(postRepository.findByUserOrderByCreationTimeDesc(user)).willReturn(expectedPosts);
+
+        // Act
+        var optionalActualPosts = underTest.getAllUsersPosts(userId);
+
+        // Assert
+        var actualPosts = optionalActualPosts.get();
+        assertThat(actualPosts).isSameAs(expectedPosts);
+    }
+
+    @Test
+    void getAllUsersPosts_givenNotExistingUser_shouldReturnEmptyOptional() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        given(userService.getById(userId)).willReturn(Optional.empty());
+
+        // Act
+        var optionalActualPosts = underTest.getAllUsersPosts(userId);
+
+        // Assert
+        assertThat(optionalActualPosts).isEmpty();
+    }
 }

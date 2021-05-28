@@ -55,7 +55,17 @@ public class PostService {
         return Optional.of(createdPost);
     }
 
-    public List<Post> getAllUsersPosts(UUID userId) {
+    public Optional<List<Post>> getAllUsersPosts(UUID userId) {
+        var optionalUser = userService.getById(userId);
 
+        if (optionalUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var user = optionalUser.get();
+
+        var posts = postRepository.findByUserOrderByCreationTimeDesc(user);
+
+        return Optional.of(posts);
     }
 }

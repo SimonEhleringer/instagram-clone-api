@@ -25,6 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -57,6 +59,9 @@ class MePostControllerTest {
 
     @MockBean
     private PostResponseMapper postResponseMapper;
+
+    @MockBean
+    private PostsResponseMapper postsResponseMapper;
 
     @Test
     @WithMockAppUser(userIdAsString = MOCKED_UUID_AS_STRING)
@@ -136,5 +141,37 @@ class MePostControllerTest {
         var response = objectMapper.readValue(responseAsString, ErrorResponse.class);
 
         assertThat(response.getErrors().size()).isGreaterThanOrEqualTo(1);
+    }
+
+    @Test
+    @WithMockAppUser(userIdAsString = MOCKED_UUID_AS_STRING)
+    void getAll_shouldReturnPosts() throws Exception {
+        // Arrange
+        var posts = new ArrayList<Post>();
+
+        var postResponse = new PostResponse(
+            1,
+            "publicImageId",
+            "text",
+            LocalDateTime.of(2000, 1, 1, 1, 1)
+        );
+
+        var postResponses = new ArrayList<PostResponse>();
+        postResponses.add(postResponse);
+
+        var expectedResponse = new PostsResponse(postResponses);
+
+        var expectedJson = objectMapper.writeValueAsString(expectedResponse);
+
+        given(postService.getAllUsersPosts(MOCKED_UUID)).willReturn(Optional.of(posts));
+        given(postsResponseMapper.toPostResponses(posts)).willReturn(expectedResponse);
+
+        // Act
+        // Assert
+        mockMvc.perform(
+                get("/api/v1/me/posts")
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedJson));
     }
 }
