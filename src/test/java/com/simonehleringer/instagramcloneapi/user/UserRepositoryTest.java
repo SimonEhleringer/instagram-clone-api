@@ -7,6 +7,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -169,6 +172,44 @@ class UserRepositoryTest {
 
         // Assert
         assertThat(optionalFoundUser).isEmpty();
+    }
+
+    @Test
+    void findByUserIdNotIn_givenOneIdNotToReturn_shouldReturnOtherUsers() {
+        // Arrange
+        var user1 = new User(
+            "fullName",
+            "username",
+            "email@test.com",
+            "encodedPassword",
+            "characteristics",
+            "publicProfileImageId"
+        );
+
+        var user2 = new User(
+                "fullName",
+                "username",
+                "email@test.com",
+                "encodedPassword",
+                "characteristics",
+                "publicProfileImageId"
+        );
+
+        var savedUser1 = underTest.save(user1);
+        var savedUser2 = underTest.save(user2);
+
+        var parameter = new ArrayList<UUID>();
+
+        parameter.add(savedUser1.getUserId());
+
+        // Act
+        var users = underTest.findByUserIdNotIn(parameter);
+
+        // Assert
+        assertThat(users.size()).isEqualTo(1);
+
+        var user = users.get(0);
+        assertThat(user.getUserId()).isEqualTo(savedUser2.getUserId());
     }
 
 }

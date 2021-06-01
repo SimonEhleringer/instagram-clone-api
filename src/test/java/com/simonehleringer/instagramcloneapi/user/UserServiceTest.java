@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
@@ -21,8 +22,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -404,6 +404,54 @@ class UserServiceTest {
     }
 
     @Test
+    void getUsersFollowers_givenExistingUser_shouldReturnUsersFollowers() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var followers = new User();
+        var followersList = new ArrayList<User>();
+        followersList.add(followers);
+
+        var user = new User(
+                userId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                followersList,
+                new ArrayList<>()
+        );
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+        // Act
+        var optionalFollowersList = underTest.getUsersFollowers(userId);
+
+        // Assert
+        var actualFollowersList = optionalFollowersList.get();
+
+        assertThat(actualFollowersList.size()).isEqualTo(1);
+        assertThat(actualFollowersList.get(0)).isSameAs(followers);
+    }
+
+    @Test
+    void getUsersFollowers_givenNotExistingUser_shouldReturnEmptyOptional() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
+        // Act
+        var optionalFollowersList = underTest.getUsersFollowers(userId);
+
+        // Assert
+        assertThat(optionalFollowersList).isEmpty();
+    }
+
+    @Test
     void removeFollow_givenExistingFollowerAndFollowed_shouldRemoveFollow() {
         // Arrange
         var followerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
@@ -539,5 +587,117 @@ class UserServiceTest {
 
         // Assert
         assertThat(optionalNewFollowedList).isEmpty();
+    }
+
+    @Test
+    void getUsersIdAndFollowedIds_givenUserWithOneFollowed_shouldReturnListWithUserIdAndFollowedId() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
+
+        var followedUser = new User(
+                followedId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        var followedList = new ArrayList<User>();
+        followedList.add(followedUser);
+
+        var user = new User(
+                userId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                followedList
+        );
+
+        // Act
+        var result = underTest.getUsersIdAndFollowedIds(user);
+
+        // Assert
+        assertThat(result.size()).isEqualTo(2);
+
+        assertThat(result.stream()
+                .filter((uuid) ->
+                        uuid.equals(userId))
+                .findFirst())
+                .isPresent();
+
+        assertThat(result.stream()
+                .filter((uuid) ->
+                        uuid.equals(followedId))
+                .findFirst())
+                .isPresent();
+    }
+
+    @Test
+    void getUsersSuggestions_givenExistingUser_shouldReturnSuggestions() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var user = new User(
+            userId,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>()
+        );
+
+        var spy = spy(underTest);
+
+        var parameter = new ArrayList<UUID>();
+
+        var expectedSuggestions = new ArrayList<User>();
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+        doReturn(parameter).when(spy).getUsersIdAndFollowedIds(user);
+
+        given(userRepository.findByUserIdNotIn(parameter)).willReturn(expectedSuggestions);
+
+        // Act
+        var optionalActualSuggestions = spy.getUsersSuggestions(userId);
+
+        // Assert
+        var actualSuggestions = optionalActualSuggestions.get();
+        assertThat(actualSuggestions).isSameAs(expectedSuggestions);
+
+        verify(spy).getUsersIdAndFollowedIds(user);
+        verify(userRepository).findByUserIdNotIn(parameter);
+    }
+
+    @Test
+    void getUsersSuggestions_givenNotExistingUser_shouldReturnEmptyOptional() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
+
+        // Act
+        var optionalSuggestions = underTest.getUsersSuggestions(userId);
+
+        // Assert
+        assertThat(optionalSuggestions).isEmpty();
     }
 }

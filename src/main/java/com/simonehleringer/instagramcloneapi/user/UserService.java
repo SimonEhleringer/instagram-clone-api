@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -103,6 +104,18 @@ public class UserService {
         return Optional.of(user.getFollowed());
     }
 
+    public Optional<List<User>> getUsersFollowers(UUID userId) {
+        var optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var user = optionalUser.get();
+
+        return Optional.of(user.getFollowers());
+    }
+
     @Transactional
     public Optional<List<User>> removeFollow(UUID followerId, UUID followedId) {
         var optionalFollower = userRepository.findById(followerId);
@@ -132,4 +145,31 @@ public class UserService {
         return Optional.of(follower.getFollowed());
     }
 
+    public Optional<List<User>> getUsersSuggestions(UUID userId) {
+        var optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var user = optionalUser.get();
+
+        var parameter = getUsersIdAndFollowedIds(user);
+
+        var suggestions = userRepository.findByUserIdNotIn(parameter);
+
+        return Optional.of(suggestions);
+    }
+
+    public List<UUID> getUsersIdAndFollowedIds(User user) {
+        var result = new ArrayList<UUID>();
+
+        result.add(user.getUserId());
+
+        for (var followed : user.getFollowed()) {
+            result.add(followed.getUserId());
+        }
+
+        return result;
+    }
 }
