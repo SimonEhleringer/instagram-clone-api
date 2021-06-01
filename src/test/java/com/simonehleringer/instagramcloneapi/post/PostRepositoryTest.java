@@ -22,10 +22,10 @@ class PostRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-//    @AfterEach
-//    void tearDown() {
-//        underTest.deleteAll();
-//    }
+    @AfterEach
+    void tearDown() {
+        underTest.deleteAll();
+    }
 
     @Test
     void findByUserOrderByCreationTimeDesc_shouldReturnUsersPosts() {
@@ -96,5 +96,81 @@ class PostRepositoryTest {
         assertThat(posts.size()).isEqualTo(2);
         assertThat(posts.get(0)).isEqualTo(createdUsersPost2);
         assertThat(posts.get(1)).isEqualTo(createdUsersPost1);
+    }
+
+    @Test
+    void findByUserInOrderByCreationTimeDesc_shouldReturnPostsOfUsersInCorrectOrder() {
+        // Arrange
+        var user = new User(
+                null,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        var anotherUser = new User(
+                null,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        var createdUser = userRepository.save(user);
+        var createdAnotherUser = userRepository.save(anotherUser);
+
+        var usersPost1 = new Post(
+            0,
+            "",
+            "",
+            LocalDateTime.of(2000, 1, 1, 1, 1),
+            createdUser
+        );
+
+        var usersPost2 = new Post(
+            0,
+            "",
+            "",
+            LocalDateTime.of(2001, 1, 1, 1, 1),
+            createdUser
+        );
+
+        var createdUsersPost1 = underTest.save(usersPost1);
+        var createdUsersPost2 = underTest.save(usersPost2);
+
+        var anotherUsersPost = new Post(
+            0,
+            "",
+            "",
+            LocalDateTime.of(2000, 1, 1, 1, 1),
+            createdAnotherUser
+        );
+
+        underTest.save(anotherUsersPost);
+
+        var parameter = new ArrayList<User>();
+        parameter.add(createdUser);
+
+        // Act
+        var posts = underTest.findByUserInOrderByCreationTimeDesc(parameter);
+
+        // Assert
+        assertThat(posts.size()).isEqualTo(2);
+
+        assertThat(posts.get(0).getPostId()).isEqualTo(createdUsersPost2.getPostId());
+        assertThat(posts.get(1).getPostId()).isEqualTo(createdUsersPost1.getPostId());
     }
 }

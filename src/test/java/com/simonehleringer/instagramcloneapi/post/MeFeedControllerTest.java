@@ -1,0 +1,80 @@
+package com.simonehleringer.instagramcloneapi.post;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationEntryPoint;
+import com.simonehleringer.instagramcloneapi.testUtil.annotation.WithMockAppUser;
+import com.simonehleringer.instagramcloneapi.user.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(controllers = MeFeedController.class)
+@AutoConfigureMockMvc(addFilters = false)
+class MeFeedControllerTest {
+    private final String loggedInUserIdAsString = "11111111-1111-1111-1111-111111111111";
+    private final UUID loggedInUserId = UUID.fromString(loggedInUserIdAsString);
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private PostService postService;
+
+    @MockBean
+    private FeedResponseMapper feedResponseMapper;
+
+    @MockBean
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @MockBean
+    private PostResponseMapper postResponseMapper;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Test
+    @WithMockAppUser(userIdAsString = loggedInUserIdAsString)
+    void get_shouldReturnLoggedInUsersFeed() throws Exception {
+        // Arrange
+        var postsList = new ArrayList<Post>();
+        var postsResponseList = new ArrayList<PostResponse>();
+
+        postsResponseList.add(new PostResponse(
+                1,
+                "publicImageId",
+                "text",
+                LocalDateTime.of(2000, 1, 1, 1, 1)
+        ));
+
+        var expectedResponse = new FeedResponse(postsResponseList);
+        var expectedJson = objectMapper.writeValueAsString(expectedResponse);
+
+        given(postService.getUsersFeed(loggedInUserId)).willReturn(Optional.of(postsList));
+        given(feedResponseMapper.toFeedResponse(postsList)).willReturn(expectedResponse);
+
+        // Act
+        // Assert
+        mockMvc.perform(
+                get("/api/v1/me/feed")
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedJson));
+    }
+}

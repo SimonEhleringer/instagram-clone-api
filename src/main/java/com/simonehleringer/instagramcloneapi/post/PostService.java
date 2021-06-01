@@ -68,4 +68,18 @@ public class PostService {
 
         return Optional.of(posts);
     }
+
+    public Optional<List<Post>> getUsersFeed(UUID userId) {
+        var optionalUser = userService.getById(userId);
+
+        if (optionalUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var user = optionalUser.get();
+
+        var feed = postRepository.findByUserInOrderByCreationTimeDesc(user.getFollowed());
+
+        return Optional.of(feed);
+    }
 }

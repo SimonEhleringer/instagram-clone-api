@@ -13,4 +13,6 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findByUserOrderByCreationTimeDesc(User user);
+
+    List<Post> findByUserInOrderByCreationTimeDesc(List<User> users);
 }

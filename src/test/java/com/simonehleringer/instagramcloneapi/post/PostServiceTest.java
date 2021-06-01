@@ -269,4 +269,55 @@ class PostServiceTest {
         // Assert
         assertThat(optionalActualPosts).isEmpty();
     }
+
+    @Test
+    void getUsersFeed_givenExistingUser_shouldReturnFeed() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var followed = spy(new ArrayList<User>());
+
+        var user = new User(
+                userId,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                followed
+        );
+
+        var expectedFeed = new ArrayList<Post>();
+
+        given(userService.getById(userId)).willReturn(Optional.of(user));
+        given(postRepository.findByUserInOrderByCreationTimeDesc(followed)).willReturn(expectedFeed);
+
+        // Act
+        var optionalFeed = underTest.getUsersFeed(userId);
+
+        // Assert
+        var actualFeed = optionalFeed.get();
+
+        assertThat(actualFeed).isSameAs(expectedFeed);
+
+        verify(postRepository).findByUserInOrderByCreationTimeDesc(followed);
+    }
+
+    @Test
+    void getUsersFeed_givenNotExistingUser_shouldReturnEmptyOptional() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        given(userService.getById(userId)).willReturn(Optional.empty());
+
+        // Act
+        var optionalFeed = underTest.getUsersFeed(userId);
+
+        // Assert
+        assertThat(optionalFeed).isEmpty();
+    }
 }
