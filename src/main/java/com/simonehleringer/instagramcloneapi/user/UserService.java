@@ -58,7 +58,7 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<List<User>> addFollow(UUID followerId, UUID followedId) {
+    public boolean addFollow(UUID followerId, UUID followedId) {
         if (followerId.equals(followedId)) {
             throw new CanNotAddFollowException("Du kannst dir selbst nicht folgen.");
         }
@@ -66,7 +66,7 @@ public class UserService {
         var optionalFollower = userRepository.findById(followerId);
 
         if (optionalFollower.isEmpty()) {
-            return Optional.empty();
+            return false;
         }
 
         var follower = optionalFollower.get();
@@ -81,7 +81,7 @@ public class UserService {
         var optionalFollowed = userRepository.findById(followedId);
 
         if (optionalFollowed.isEmpty()) {
-            return Optional.empty();
+            return false;
         }
 
         var followed = optionalFollowed.get();
@@ -89,7 +89,7 @@ public class UserService {
         followed.getFollowers().add(follower);
         follower.getFollowed().add(followed);
 
-        return Optional.of(follower.getFollowed());
+        return true;
     }
 
     public Optional<List<User>> getUsersFollowed(UUID userId) {
@@ -117,11 +117,11 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<List<User>> removeFollow(UUID followerId, UUID followedId) {
+    public boolean removeFollow(UUID followerId, UUID followedId) {
         var optionalFollower = userRepository.findById(followerId);
 
         if (optionalFollower.isEmpty()) {
-            return Optional.empty();
+            return false;
         }
 
         var follower = optionalFollower.get();
@@ -129,7 +129,7 @@ public class UserService {
         var optionalFollowed = userRepository.findById(followedId);
 
         if (optionalFollowed.isEmpty()) {
-            return Optional.empty();
+            return false;
         }
 
         var followed = optionalFollowed.get();
@@ -137,12 +137,12 @@ public class UserService {
         var hasBeenRemoved = follower.getFollowed().remove(followed);
 
         if (!hasBeenRemoved) {
-            return Optional.empty();
+            return false;
         }
 
         followed.getFollowers().remove(follower);
 
-        return Optional.of(follower.getFollowed());
+        return true;
     }
 
     public Optional<List<User>> getUsersSuggestions(UUID userId) {

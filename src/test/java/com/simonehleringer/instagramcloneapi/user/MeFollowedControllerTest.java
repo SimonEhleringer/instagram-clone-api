@@ -75,12 +75,10 @@ class MeFollowedControllerTest {
             userResponseList
         );
 
-        var expectedResponseAsJson = objectMapper.writeValueAsString(expectedResponse);
-
         var followedList = new ArrayList<User>();
         followedList.add(new User());
 
-        given(userService.addFollow(loggedInUserId, followedId)).willReturn(Optional.of(followedList));
+        given(userService.addFollow(loggedInUserId, followedId)).willReturn(true);
         given(followedResponseMapper.toFollowedResponse(followedList)).willReturn(expectedResponse);
 
         // Act
@@ -88,8 +86,7 @@ class MeFollowedControllerTest {
         mockMvc.perform(
                 post("/api/v1/me/followed/" + followedId.toString())
         )
-                .andExpect(status().isOk())
-                .andExpect(content().json(expectedResponseAsJson));
+                .andExpect(status().isNoContent());
 
         verify(userService).addFollow(loggedInUserId, followedId);
     }
@@ -100,7 +97,7 @@ class MeFollowedControllerTest {
         // Arrange
         var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
 
-        given(userService.addFollow(loggedInUserId, followedId)).willReturn(Optional.empty());
+        given(userService.addFollow(loggedInUserId, followedId)).willReturn(false);
 
         // Act
         // Assert
@@ -151,9 +148,7 @@ class MeFollowedControllerTest {
                 new ArrayList<>()
         );
 
-        var expectedJson = objectMapper.writeValueAsString(expectedResponse);
-
-        given(userService.removeFollow(loggedInUserId, followedId)).willReturn(Optional.of(newFollowedList));
+        given(userService.removeFollow(loggedInUserId, followedId)).willReturn(true);
         given(followedResponseMapper.toFollowedResponse(newFollowedList)).willReturn(expectedResponse);
 
         // Act
@@ -161,8 +156,7 @@ class MeFollowedControllerTest {
         mockMvc.perform(
                 delete("/api/v1/me/followed/" + followedId.toString())
         )
-                .andExpect(status().isOk())
-                .andExpect(content().json(expectedJson));
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -171,7 +165,7 @@ class MeFollowedControllerTest {
         // Arrange
         var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
 
-        given(userService.removeFollow(loggedInUserId, followedId)).willReturn(Optional.empty());
+        given(userService.removeFollow(loggedInUserId, followedId)).willReturn(false);
 
         // Act
         // Assert

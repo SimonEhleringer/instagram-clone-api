@@ -258,7 +258,7 @@ class UserServiceTest {
     }
 
     @Test
-    void addFollow_givenExistingFollowerIdAndFollowedId_shouldReturnNewFollowerListOfFollowed() {
+    void addFollow_givenExistingFollowerIdAndFollowedId_shouldReturnTrue() {
         // Arrange
         var followedId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         var followerId = UUID.fromString("22222222-2222-2222-2222-222222222222");
@@ -275,17 +275,14 @@ class UserServiceTest {
         given(userRepository.findById(followerId)).willReturn(Optional.of(follower));
 
         // Act
-        var optionalFollowed = underTest.addFollow(followerId, followedId);
+        var hasBeenAdded = underTest.addFollow(followerId, followedId);
 
         // Assert
-        var followedList = optionalFollowed.get();
-
-        assertThat(followedFollowers.get(0)).isSameAs(follower);
-        assertThat(followedList.get(0)).isSameAs(followed);
+        assertThat(hasBeenAdded).isTrue();
     }
 
     @Test
-    void addFollow_givenExistingFollowerIdButNonExistingFollowedId_shouldReturnOptionalEmpty() {
+    void addFollow_givenExistingFollowerIdButNonExistingFollowedId_shouldReturnFalse() {
         // Arrange
         var followedId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         var followerId = UUID.fromString("22222222-2222-2222-2222-222222222222");
@@ -297,14 +294,14 @@ class UserServiceTest {
         given(userRepository.findById(followedId)).willReturn(Optional.empty());
 
         // Act
-        var optionalFollowed = underTest.addFollow(followerId, followedId);
+        var hasBeenAdded = underTest.addFollow(followerId, followedId);
 
         // Assert
-        assertThat(optionalFollowed).isEmpty();
+        assertThat(hasBeenAdded).isFalse();
     }
 
     @Test
-    void addFollow_givenNonExistingFollowerId_shouldReturnOptionalEmpty() {
+    void addFollow_givenNonExistingFollowerId_shouldReturnFalse() {
         // Arrange
         var followedId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         var followerId = UUID.fromString("22222222-2222-2222-2222-222222222222");
@@ -312,10 +309,10 @@ class UserServiceTest {
         given(userRepository.findById(followerId)).willReturn(Optional.empty());
 
         // Act
-        var optionalFollowed = underTest.addFollow(followerId, followedId);
+        var hasBeenAdded = underTest.addFollow(followerId, followedId);
 
         // Assert
-        assertThat(optionalFollowed).isEmpty();
+        assertThat(hasBeenAdded).isFalse();
     }
 
     @Test
@@ -492,16 +489,14 @@ class UserServiceTest {
         given(userRepository.findById(followedId)).willReturn(Optional.of(followed));
 
         // Act
-        var optionalNewFollowedList = underTest.removeFollow(followerId, followedId);
+        var hasBeenRemoved = underTest.removeFollow(followerId, followedId);
 
         // Assert
-        var newFollowedList = optionalNewFollowedList.get();
-
-        assertThat(newFollowedList.size()).isEqualTo(0);
+        assertThat(hasBeenRemoved).isTrue();
     }
 
     @Test
-    void removeFollow_givenFollowedThatWasNotFollowedByFollower_shouldReturnEmptyOptional() {
+    void removeFollow_givenFollowedThatWasNotFollowedByFollower_shouldReturnFalse() {
         // Arrange
         var followerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
@@ -538,14 +533,14 @@ class UserServiceTest {
         given(userRepository.findById(followedId)).willReturn(Optional.of(followed));
 
         // Act
-        var optionalNewFollowedList = underTest.removeFollow(followerId, followedId);
+        var hasBeenRemoved = underTest.removeFollow(followerId, followedId);
 
         // Assert
-        assertThat(optionalNewFollowedList).isEmpty();
+        assertThat(hasBeenRemoved).isFalse();
     }
 
     @Test
-    void removeFollow_givenExistingFollowerButNotExistingFollowed_shouldReturnEmptyOptional() {
+    void removeFollow_givenExistingFollowerButNotExistingFollowed_shouldReturnFalse() {
         // Arrange
         var followerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
@@ -568,14 +563,14 @@ class UserServiceTest {
         given(userRepository.findById(followedId)).willReturn(Optional.empty());
 
         // Act
-        var optionalNewFollowedList = underTest.removeFollow(followerId, followedId);
+        var hasBeenRemoved = underTest.removeFollow(followerId, followedId);
 
         // Assert
-        assertThat(optionalNewFollowedList).isEmpty();
+        assertThat(hasBeenRemoved).isFalse();
     }
 
     @Test
-    void removeFollow_givenNotExistingFollower_shouldReturnEmptyOptional() {
+    void removeFollow_givenNotExistingFollower_shouldReturnFalse() {
         // Arrange
         var followerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         var followedId = UUID.fromString("22222222-2222-2222-2222-222222222222");
@@ -583,10 +578,10 @@ class UserServiceTest {
         given(userRepository.findById(followerId)).willReturn(Optional.empty());
 
         // Act
-        var optionalNewFollowedList = underTest.removeFollow(followerId, followedId);
+        var hasBeenRemoved = underTest.removeFollow(followerId, followedId);
 
         // Assert
-        assertThat(optionalNewFollowedList).isEmpty();
+        assertThat(hasBeenRemoved).isFalse();
     }
 
     @Test

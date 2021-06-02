@@ -20,7 +20,6 @@ import static com.simonehleringer.instagramcloneapi.user.UserConstants.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    // TODO: Write tests for validation
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(

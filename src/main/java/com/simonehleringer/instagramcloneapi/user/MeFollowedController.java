@@ -18,17 +18,13 @@ public class MeFollowedController {
 
     @PostMapping(path = "{followedId}")
     public ResponseEntity<?> add(@PathVariable UUID followedId) {
-        var optionalNewFollowed = userService.addFollow(ControllerUtils.getLoggedInUserId(), followedId);
+        var hasBeenAdded = userService.addFollow(ControllerUtils.getLoggedInUserId(), followedId);
 
-        if (optionalNewFollowed.isEmpty()) {
+        if (!hasBeenAdded) {
             return ResponseEntity.notFound().build();
         }
 
-        var newFollowed = optionalNewFollowed.get();
-
-        var response = followedResponseMapper.toFollowedResponse(newFollowed);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -48,16 +44,12 @@ public class MeFollowedController {
 
     @DeleteMapping(path = "{followedId}")
     public ResponseEntity<?> delete(@PathVariable UUID followedId) {
-        var optionalNewFollowed = userService.removeFollow(ControllerUtils.getLoggedInUserId(), followedId);
+        var hasBeenRemoved = userService.removeFollow(ControllerUtils.getLoggedInUserId(), followedId);
 
-        if (optionalNewFollowed.isEmpty()) {
+        if (!hasBeenRemoved) {
             return ResponseEntity.notFound().build();
         }
 
-        var newFollowed = optionalNewFollowed.get();
-
-        var response = followedResponseMapper.toFollowedResponse(newFollowed);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.noContent().build();
     }
 }
