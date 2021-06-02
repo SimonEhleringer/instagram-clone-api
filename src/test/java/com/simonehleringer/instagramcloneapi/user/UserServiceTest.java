@@ -1,6 +1,7 @@
 package com.simonehleringer.instagramcloneapi.user;
 
 import com.simonehleringer.instagramcloneapi.common.ValidationService;
+import com.simonehleringer.instagramcloneapi.user.me.CanNotAddFollowException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,10 +9,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Commit;
 
 import java.util.ArrayList;
 import java.util.Optional;

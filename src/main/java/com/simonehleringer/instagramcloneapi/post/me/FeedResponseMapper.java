@@ -1,5 +1,7 @@
-package com.simonehleringer.instagramcloneapi.post;
+package com.simonehleringer.instagramcloneapi.post.me;
 
+import com.simonehleringer.instagramcloneapi.post.Post;
+import com.simonehleringer.instagramcloneapi.post.PostResponseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

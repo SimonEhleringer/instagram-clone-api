@@ -1,5 +1,7 @@
-package com.simonehleringer.instagramcloneapi.post;
+package com.simonehleringer.instagramcloneapi.post.me;
 
+import com.simonehleringer.instagramcloneapi.post.Post;
+import com.simonehleringer.instagramcloneapi.post.me.FeedResponseMapper;
 import com.simonehleringer.instagramcloneapi.user.User;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -8,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class FeedResponseMapperTest {
     private final FeedResponseMapper underTest = Mappers.getMapper(FeedResponseMapper.class);

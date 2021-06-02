@@ -1,5 +1,7 @@
-package com.simonehleringer.instagramcloneapi.user;
+package com.simonehleringer.instagramcloneapi.user.me;
 
+import com.simonehleringer.instagramcloneapi.user.User;
+import com.simonehleringer.instagramcloneapi.user.UserResponseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

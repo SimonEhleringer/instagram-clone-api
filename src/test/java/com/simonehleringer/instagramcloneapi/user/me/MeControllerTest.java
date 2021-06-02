@@ -1,9 +1,14 @@
-package com.simonehleringer.instagramcloneapi.user;
+package com.simonehleringer.instagramcloneapi.user.me;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simonehleringer.instagramcloneapi.testUtil.annotation.WithMockAppUser;
 import com.simonehleringer.instagramcloneapi.common.ControllerUtils;
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationEntryPoint;
+import com.simonehleringer.instagramcloneapi.user.User;
+import com.simonehleringer.instagramcloneapi.user.UserResponse;
+import com.simonehleringer.instagramcloneapi.user.UserResponseMapper;
+import com.simonehleringer.instagramcloneapi.user.UserService;
+import com.simonehleringer.instagramcloneapi.user.me.MeController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

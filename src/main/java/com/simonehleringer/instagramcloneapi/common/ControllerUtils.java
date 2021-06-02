@@ -7,7 +7,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.UUID;
 
-// TODO: Add tests?
 public class ControllerUtils {
     public static URI getLocationHeader(Object id) {
         return ServletUriComponentsBuilder

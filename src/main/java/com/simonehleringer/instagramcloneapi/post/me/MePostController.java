@@ -1,6 +1,10 @@
-package com.simonehleringer.instagramcloneapi.post;
+package com.simonehleringer.instagramcloneapi.post.me;
 
 import com.simonehleringer.instagramcloneapi.common.ControllerUtils;
+import com.simonehleringer.instagramcloneapi.post.PostRequest;
+import com.simonehleringer.instagramcloneapi.post.PostResponseMapper;
+import com.simonehleringer.instagramcloneapi.post.PostService;
+import com.simonehleringer.instagramcloneapi.post.PostsResponseMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

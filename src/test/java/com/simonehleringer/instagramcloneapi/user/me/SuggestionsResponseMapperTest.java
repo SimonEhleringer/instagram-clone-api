@@ -1,5 +1,7 @@
-package com.simonehleringer.instagramcloneapi.user;
+package com.simonehleringer.instagramcloneapi.user.me;
 
+import com.simonehleringer.instagramcloneapi.user.User;
+import com.simonehleringer.instagramcloneapi.user.me.SuggestionsResponseMapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -7,7 +9,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class SuggestionsResponseMapperTest {
     private final SuggestionsResponseMapper underTest = Mappers.getMapper(SuggestionsResponseMapper.class);

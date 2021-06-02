@@ -1,5 +1,6 @@
-package com.simonehleringer.instagramcloneapi.post;
+package com.simonehleringer.instagramcloneapi.post.me;
 
+import com.simonehleringer.instagramcloneapi.post.PostResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

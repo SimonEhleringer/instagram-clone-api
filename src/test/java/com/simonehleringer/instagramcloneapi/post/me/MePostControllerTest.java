@@ -1,20 +1,15 @@
-package com.simonehleringer.instagramcloneapi.post;
+package com.simonehleringer.instagramcloneapi.post.me;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simonehleringer.instagramcloneapi.common.ErrorResponse;
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationEntryPoint;
+import com.simonehleringer.instagramcloneapi.post.*;
+import com.simonehleringer.instagramcloneapi.post.me.MePostController;
 import com.simonehleringer.instagramcloneapi.testUtil.annotation.WithMockAppUser;
-import com.simonehleringer.instagramcloneapi.user.MeController;
-import com.simonehleringer.instagramcloneapi.user.User;
-import com.simonehleringer.instagramcloneapi.user.UserService;
-import org.apache.http.entity.ContentType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mapstruct.factory.Mappers;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,7 +25,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;

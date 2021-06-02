@@ -1,9 +1,15 @@
-package com.simonehleringer.instagramcloneapi.post;
+package com.simonehleringer.instagramcloneapi.post.me;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationEntryPoint;
+import com.simonehleringer.instagramcloneapi.post.Post;
+import com.simonehleringer.instagramcloneapi.post.PostResponse;
+import com.simonehleringer.instagramcloneapi.post.PostResponseMapper;
+import com.simonehleringer.instagramcloneapi.post.PostService;
+import com.simonehleringer.instagramcloneapi.post.me.FeedResponse;
+import com.simonehleringer.instagramcloneapi.post.me.FeedResponseMapper;
+import com.simonehleringer.instagramcloneapi.post.me.MeFeedController;
 import com.simonehleringer.instagramcloneapi.testUtil.annotation.WithMockAppUser;
-import com.simonehleringer.instagramcloneapi.user.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
