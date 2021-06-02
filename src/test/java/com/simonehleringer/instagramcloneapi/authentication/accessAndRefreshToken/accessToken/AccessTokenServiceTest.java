@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.nio.charset.StandardCharsets;
-import java.sql.Date;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.UUID;

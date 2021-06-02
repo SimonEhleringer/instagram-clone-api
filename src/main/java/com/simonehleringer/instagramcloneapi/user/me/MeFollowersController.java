@@ -22,6 +22,7 @@ public class MeFollowersController {
     public ResponseEntity<?> getAll() {
         var optionalFollowers = userService.getUsersFollowers(ControllerUtils.getLoggedInUserId());
 
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
         var followers = optionalFollowers.get();
 
         var response = followersResponseMapper.toFollowersResponse(followers);

@@ -5,7 +5,6 @@ import com.simonehleringer.instagramcloneapi.common.FilterChainExceptionHandling
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationEntryPoint;
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;

@@ -1,7 +1,6 @@
 package com.simonehleringer.instagramcloneapi.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.simonehleringer.instagramcloneapi.common.ControllerUtils;
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationEntryPoint;
 import com.simonehleringer.instagramcloneapi.testUtil.annotation.WithMockAppUser;
 import org.junit.jupiter.api.Test;
@@ -16,8 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

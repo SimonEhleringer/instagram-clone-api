@@ -13,9 +13,9 @@ import static com.simonehleringer.instagramcloneapi.post.PostConstants.TEXT__SIZ
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostRequest {
-    @NotNull
+    @NotNull(message = "Es wurde kein Bild übermittelt.")
     private String imageDataUri;
 
-    @Size(max = TEXT__SIZE_MAX)
+    @Size(max = TEXT__SIZE_MAX, message = "Der Text darf maximal " + TEXT__SIZE_MAX + " Zeichen lang sein.")
     private String text;
 }

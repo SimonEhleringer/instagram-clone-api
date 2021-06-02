@@ -21,6 +21,7 @@ public class MeSuggestionsController {
     public ResponseEntity<?> getAll() {
         var optionalSuggestions = userService.getUsersSuggestions(ControllerUtils.getLoggedInUserId());
 
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
         var suggestions = optionalSuggestions.get();
 
         var response = suggestionsResponseMapper.toSuggestionsResponse(suggestions);

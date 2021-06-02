@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.UUID;
 
 @Service
@@ -24,9 +23,7 @@ public class CloudinaryService {
         try {
             var result = cloudinary.uploader().upload(imageDataUri, params);
 
-            var publicId = (String) result.get("public_id");
-
-            return publicId;
+            return (String) result.get("public_id");
         } catch (IOException e) {
             throw new CanNotUploadImageException();
         }

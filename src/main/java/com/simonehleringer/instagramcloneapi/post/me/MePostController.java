@@ -29,6 +29,7 @@ public class MePostController {
                 ControllerUtils.getLoggedInUserId()
         );
 
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
         var createdPost = optionalCreatedPost.get();
 
         var response = postResponseMapper.toPostResponse(createdPost);
@@ -42,6 +43,7 @@ public class MePostController {
     public ResponseEntity<?> getAll() {
         var optionalPosts = postService.getAllUsersPosts(ControllerUtils.getLoggedInUserId());
 
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
         var posts = optionalPosts.get();
 
         var response = postsResponseMapper.toPostResponses(posts);

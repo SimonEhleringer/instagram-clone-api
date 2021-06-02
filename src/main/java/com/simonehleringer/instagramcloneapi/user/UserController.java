@@ -1,6 +1,5 @@
 package com.simonehleringer.instagramcloneapi.user;
 
-import com.simonehleringer.instagramcloneapi.common.ControllerUtils;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

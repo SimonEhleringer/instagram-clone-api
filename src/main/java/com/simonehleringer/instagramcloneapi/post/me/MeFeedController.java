@@ -21,7 +21,7 @@ public class MeFeedController {
     public ResponseEntity<?> get() {
         var optionalFeed = postService.getUsersFeed(ControllerUtils.getLoggedInUserId());
 
-        var feed = optionalFeed.get();
+        @SuppressWarnings("OptionalGetWithoutIsPresent") var feed = optionalFeed.get();
 
         var response = feedResponseMapper.toFeedResponse(feed);
 

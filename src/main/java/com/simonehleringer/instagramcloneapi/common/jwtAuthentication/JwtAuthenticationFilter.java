@@ -2,6 +2,7 @@ package com.simonehleringer.instagramcloneapi.common.jwtAuthentication;
 
 import com.google.common.base.Strings;
 import org.springframework.http.HttpHeaders;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -16,12 +17,12 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         return org.apache.commons.lang3.StringUtils.containsIgnoreCase(request.getServletPath(), "/authentication");
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, @NonNull HttpServletResponse httpServletResponse, @NonNull FilterChain filterChain) throws ServletException, IOException {
         final String bearerPrefix = "bearer ";
 
         var authorizationHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);

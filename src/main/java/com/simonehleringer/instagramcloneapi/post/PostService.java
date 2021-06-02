@@ -5,18 +5,14 @@ import com.simonehleringer.instagramcloneapi.cloudinary.ImageType;
 import com.simonehleringer.instagramcloneapi.common.ValidationService;
 import com.simonehleringer.instagramcloneapi.user.UserService;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.Size;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.simonehleringer.instagramcloneapi.post.PostConstants.TEXT__SIZE_MAX;
 
 @Service
 @Transactional(readOnly = true)
