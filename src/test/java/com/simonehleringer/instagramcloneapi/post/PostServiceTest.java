@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.ConstraintViolationException;
+import java.lang.reflect.Array;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -273,7 +274,20 @@ class PostServiceTest {
         // Arrange
         var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
-        var followed = spy(new ArrayList<User>());
+        var followed = new ArrayList<User>();
+        followed.add(new User(
+                UUID.fromString("22222222-2222-2222-2222-222222222222"),
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        ));
 
         var user = new User(
                 userId,
@@ -289,10 +303,13 @@ class PostServiceTest {
                 followed
         );
 
+        var userSearchList = new ArrayList<>(followed);
+        userSearchList.add(user);
+
         var expectedFeed = new ArrayList<Post>();
 
         given(userService.getById(userId)).willReturn(Optional.of(user));
-        given(postRepository.findByUserInOrderByCreationTimeDesc(followed)).willReturn(expectedFeed);
+        given(postRepository.findByUserInOrderByCreationTimeDesc(userSearchList)).willReturn(expectedFeed);
 
         // Act
         var optionalFeed = underTest.getUsersFeed(userId);
@@ -302,7 +319,7 @@ class PostServiceTest {
 
         assertThat(actualFeed).isSameAs(expectedFeed);
 
-        verify(postRepository).findByUserInOrderByCreationTimeDesc(followed);
+        verify(postRepository).findByUserInOrderByCreationTimeDesc(userSearchList);
     }
 
     @Test

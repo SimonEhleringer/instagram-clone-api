@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -74,7 +75,10 @@ public class PostService {
 
         var user = optionalUser.get();
 
-        var feed = postRepository.findByUserInOrderByCreationTimeDesc(user.getFollowed());
+        var userSearchList = new ArrayList<>(user.getFollowed());
+        userSearchList.add(user);
+
+        var feed = postRepository.findByUserInOrderByCreationTimeDesc(userSearchList);
 
         return Optional.of(feed);
     }
