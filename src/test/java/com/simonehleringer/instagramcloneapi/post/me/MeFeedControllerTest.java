@@ -10,6 +10,7 @@ import com.simonehleringer.instagramcloneapi.post.me.FeedResponse;
 import com.simonehleringer.instagramcloneapi.post.me.FeedResponseMapper;
 import com.simonehleringer.instagramcloneapi.post.me.MeFeedController;
 import com.simonehleringer.instagramcloneapi.testUtil.annotation.WithMockAppUser;
+import com.simonehleringer.instagramcloneapi.user.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,13 +61,19 @@ class MeFeedControllerTest {
     void get_shouldReturnLoggedInUsersFeed() throws Exception {
         // Arrange
         var postsList = new ArrayList<Post>();
-        var postsResponseList = new ArrayList<PostResponse>();
+        var postsResponseList = new ArrayList<FeedPostResponse>();
 
-        postsResponseList.add(new PostResponse(
+        postsResponseList.add(new FeedPostResponse(
                 1,
                 "publicImageId",
                 "text",
-                LocalDateTime.of(2000, 1, 1, 1, 1)
+                LocalDateTime.of(2000, 1, 1, 1, 1),
+                new UserResponse(
+                        UUID.fromString("22222222-2222-2222-2222-222222222222"),
+                        "fullName",
+                        "username",
+                        "publicProfileImageId"
+                )
         ));
 
         var expectedResponse = new FeedResponse(postsResponseList);

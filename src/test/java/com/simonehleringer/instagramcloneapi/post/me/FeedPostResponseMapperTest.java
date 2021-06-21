@@ -1,7 +1,6 @@
 package com.simonehleringer.instagramcloneapi.post.me;
 
 import com.simonehleringer.instagramcloneapi.post.Post;
-import com.simonehleringer.instagramcloneapi.post.me.FeedResponseMapper;
 import com.simonehleringer.instagramcloneapi.user.User;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -12,16 +11,17 @@ import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class FeedResponseMapperTest {
-    private final FeedResponseMapper underTest = Mappers.getMapper(FeedResponseMapper.class);
+
+class FeedPostResponseMapperTest {
+    private final FeedPostResponseMapper underTest = Mappers.getMapper(FeedPostResponseMapper.class);
 
     @Test
-    void toFeedResponse_shouldMapProperly() {
+    void toFeedPostResponseList_shouldMapProperly() {
         // Arrange
         var postId = 1;
         var publicImageId = "publicImageId";
         var text = "text";
-        var creationTime = LocalDateTime.of(2000, 1, 1, 1, 1);
+        var creationTime = LocalDateTime.of(2000, 1, 1, 1, 1, 1);
 
         var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         var fullName = "fullName";
@@ -50,18 +50,16 @@ class FeedResponseMapperTest {
                 user
         );
 
-        var posts = new ArrayList<Post>();
-        posts.add(post);
+        var postList = new ArrayList<Post>();
+        postList.add(post);
 
         // Act
-        var feedResponse = underTest.toFeedResponse(posts);
+        var feedPostResponseList = underTest.toFeedPostResponseList(postList);
 
         // Assert
-        var feed = feedResponse.getFeed();
+        assertThat(feedPostResponseList.size()).isEqualTo(1);
 
-        assertThat(feed.size()).isEqualTo(1);
-
-        var feedPostResponse = feed.get(0);
+        var feedPostResponse = feedPostResponseList.get(0);
 
         assertThat(feedPostResponse.getPostId()).isEqualTo(postId);
         assertThat(feedPostResponse.getPublicImageId()).isEqualTo(publicImageId);

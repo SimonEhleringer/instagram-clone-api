@@ -10,10 +10,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface FeedResponseMapper {
     default FeedResponse toFeedResponse(List<Post> posts) {
-        var mapper = Mappers.getMapper(PostResponseMapper.class);
+        var mapper = Mappers.getMapper(FeedPostResponseMapper.class);
 
         return new FeedResponse(
-                mapper.toPostResponseList(posts)
+                mapper.toFeedPostResponseList(posts)
         );
     }
 }
