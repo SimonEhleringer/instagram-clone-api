@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.ConstraintViolationException;
-import java.lang.reflect.Array;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

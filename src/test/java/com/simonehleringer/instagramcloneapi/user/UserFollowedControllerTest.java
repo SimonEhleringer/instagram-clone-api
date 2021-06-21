@@ -3,7 +3,6 @@ package com.simonehleringer.instagramcloneapi.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simonehleringer.instagramcloneapi.common.jwtAuthentication.JwtAuthenticationEntryPoint;
 import com.simonehleringer.instagramcloneapi.testUtil.annotation.WithMockAppUser;
-import com.simonehleringer.instagramcloneapi.user.me.MeFollowedController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
