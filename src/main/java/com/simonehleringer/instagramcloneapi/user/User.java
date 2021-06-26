@@ -34,7 +34,6 @@ public class User {
 
     @NotNull
     @Size(max = USERNAME__SIZE_MAX)
-    // Only characters, numbers and underscore
     @Pattern(regexp = USERNAME__PATTERN_REGEXP)
     private String username;
 
@@ -44,7 +43,6 @@ public class User {
     @Size(max = EMAIL__SIZE_MAX)
     private String email;
 
-    // Column annotation, because in code password can be null
     @Column(nullable = false)
     @Size(max = ENCODED_PASSWORD__SIZE_MAX)
     private String encodedPassword;
@@ -53,7 +51,7 @@ public class User {
     @Size(max = CHARACTERISTICS__SIZE_MAX)
     private String characteristics;
 
-    // TODO: Validation -> Length
+    @Size(max = PUBLIC_PROFILE_IMAGE_ID__SIZE_MAX)
     private String publicProfileImageId;
 
     @OneToMany(mappedBy = "user")

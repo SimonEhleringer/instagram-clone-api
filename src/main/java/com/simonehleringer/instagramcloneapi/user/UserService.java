@@ -1,5 +1,7 @@
 package com.simonehleringer.instagramcloneapi.user;
 
+import com.simonehleringer.instagramcloneapi.cloudinary.CloudinaryService;
+import com.simonehleringer.instagramcloneapi.cloudinary.ImageType;
 import com.simonehleringer.instagramcloneapi.common.ValidationService;
 import com.simonehleringer.instagramcloneapi.user.me.CanNotAddFollowException;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ValidationService validationService;
+    private final CloudinaryService cloudinaryService;
 
     @Transactional
     public User createUser(@NonNull User userToCreate,@NonNull @Pattern(regexp = UserConstants.PASSWORD__PATTERN_REGEXP) String password) {
@@ -170,5 +173,26 @@ public class UserService {
         }
 
         return result;
+    }
+
+    @Transactional
+    public Optional<User> changeProfileImage(UUID userId, String imageDataUri) {
+        var optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var user = optionalUser.get();
+
+        if (user.getPublicProfileImageId() != null) {
+            cloudinaryService.deleteImage(user.getPublicProfileImageId());
+        }
+
+        var publicImageId = cloudinaryService.uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, user.getUserId());
+
+        user.setPublicProfileImageId(publicImageId);
+
+        return Optional.of(user);
     }
 }

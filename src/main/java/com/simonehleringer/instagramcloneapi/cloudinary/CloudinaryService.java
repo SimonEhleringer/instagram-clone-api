@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -26,6 +27,14 @@ public class CloudinaryService {
             return (String) result.get("public_id");
         } catch (IOException e) {
             throw new CanNotUploadImageException();
+        }
+    }
+
+    public void deleteImage(String publicImageId) {
+        try {
+            cloudinary.uploader().destroy(publicImageId, new HashMap<String, String>());
+        } catch (IOException e) {
+            throw new CanNotDeleteImageException();
         }
     }
 }

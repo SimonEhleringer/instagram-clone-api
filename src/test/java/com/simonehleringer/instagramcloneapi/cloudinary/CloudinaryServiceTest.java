@@ -68,4 +68,27 @@ class CloudinaryServiceTest {
         assertThatThrownBy(() ->
                 underTest.uploadImage("imageDataUri", ImageType.POST, UUID.fromString("11111111-1111-1111-1111-111111111111")));
     }
+
+    @Test
+    void deleteImage_givenValidParameters_shouldDeleteImage() throws Exception {
+        // Arrange
+        var publicImageId = "publicImageId";
+
+        // Act
+        underTest.deleteImage(publicImageId);
+
+        // Assert
+        verify(uploader).destroy(eq(publicImageId), any());
+    }
+
+    @Test
+    void deleteImage_givenInvalidParameters_shouldThrow() throws Exception {
+        // Arrange
+        given(uploader.destroy(anyString(), any())).willThrow(IOException.class);
+
+        // Act
+        // Assert
+        assertThatThrownBy(() ->
+                underTest.deleteImage("publicImageId"));
+    }
 }

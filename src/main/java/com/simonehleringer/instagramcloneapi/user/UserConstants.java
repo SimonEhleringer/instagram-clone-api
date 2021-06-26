@@ -13,4 +13,6 @@ public class UserConstants {
     public static final String PASSWORD__PATTERN_REGEXP = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,50}$";
 
     public static final int CHARACTERISTICS__SIZE_MAX = 150;
+
+    public static final int PUBLIC_PROFILE_IMAGE_ID__SIZE_MAX = 255;
 }

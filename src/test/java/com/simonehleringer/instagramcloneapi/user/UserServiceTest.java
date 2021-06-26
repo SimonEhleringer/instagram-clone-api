@@ -1,13 +1,15 @@
 package com.simonehleringer.instagramcloneapi.user;
 
+import com.simonehleringer.instagramcloneapi.cloudinary.CloudinaryService;
+import com.simonehleringer.instagramcloneapi.cloudinary.ImageType;
 import com.simonehleringer.instagramcloneapi.common.ValidationService;
 import com.simonehleringer.instagramcloneapi.user.me.CanNotAddFollowException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,12 +35,11 @@ class UserServiceTest {
     @Mock
     private ValidationService validationService;
 
-    private UserService underTest;
+    @Mock
+    private CloudinaryService cloudinaryService;
 
-    @BeforeEach
-    void setUp() {
-        underTest = new UserService(userRepository, passwordEncoder, validationService);
-    }
+    @InjectMocks
+    private UserService underTest;
 
     @Test
     void createUser_givenNotExistingUser_shouldSaveUser() {
@@ -692,5 +693,98 @@ class UserServiceTest {
 
         // Assert
         assertThat(optionalSuggestions).isEmpty();
+    }
+
+    @Test
+    void changeProfileImage_givenExistingUserAndNullProfileImageId_shouldUploadImageAndReturnUpdatedUser() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var user = new User(
+                userId,
+                "fullName",
+                "username",
+                "email",
+                "encodedPassword",
+                "characteristics",
+                null,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        var imageDataUri = "imageDataUri";
+        var newPublicProfileImageId = "newPublicProfileImageId";
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+        given(cloudinaryService.uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, userId))
+                .willReturn(newPublicProfileImageId);
+
+        // Act
+        var optionalUpdatedUser = underTest.changeProfileImage(userId, imageDataUri);
+
+        // Assert
+        var updatedUser = optionalUpdatedUser.get();
+
+        assertThat(updatedUser).isSameAs(user);
+        assertThat(updatedUser.getPublicProfileImageId()).isEqualTo(newPublicProfileImageId);
+
+        verify(cloudinaryService, never()).deleteImage(anyString());
+        verify(cloudinaryService).uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, userId);
+    }
+
+    @Test
+    void changeProfileImage_givenExistingUserAndExistingProfileImageId_shouldDeleteOldImageAndUploadNewImageAndReturnUpdatedUser() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        var publicProfileImageId = "publicProfileImageId";
+
+        var user = new User(
+                userId,
+                "fullName",
+                "username",
+                "email",
+                "encodedPassword",
+                "characteristics",
+                publicProfileImageId,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        var imageDataUri = "imageDataUri";
+        var newPublicProfileImageId = "newPublicProfileImageId";
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+        given(cloudinaryService.uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, userId))
+                .willReturn(newPublicProfileImageId);
+
+        // Act
+        var optionalUpdatedUser = underTest.changeProfileImage(userId, imageDataUri);
+
+        // Assert
+        var updatedUser = optionalUpdatedUser.get();
+
+        assertThat(updatedUser).isSameAs(user);
+        assertThat(updatedUser.getPublicProfileImageId()).isEqualTo(newPublicProfileImageId);
+
+        verify(cloudinaryService).deleteImage(publicProfileImageId);
+        verify(cloudinaryService).uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, userId);
+    }
+
+    @Test
+    void changeProfileImage_givenNotExistingUser_shouldReturnEmptyOptional() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
+
+        // Act
+        var optionalUpdatedUser = underTest.changeProfileImage(userId, "imageDataUri");
+
+        // Assert
+        assertThat(optionalUpdatedUser).isEmpty();
     }
 }
