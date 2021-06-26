@@ -730,8 +730,8 @@ class UserServiceTest {
         assertThat(updatedUser).isSameAs(user);
         assertThat(updatedUser.getPublicProfileImageId()).isEqualTo(newPublicProfileImageId);
 
-        verify(cloudinaryService, never()).deleteImage(anyString());
         verify(cloudinaryService).uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, userId);
+        verify(cloudinaryService, never()).deleteImage(anyString());
     }
 
     @Test
@@ -770,8 +770,8 @@ class UserServiceTest {
         assertThat(updatedUser).isSameAs(user);
         assertThat(updatedUser.getPublicProfileImageId()).isEqualTo(newPublicProfileImageId);
 
-        verify(cloudinaryService).deleteImage(publicProfileImageId);
         verify(cloudinaryService).uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, userId);
+        verify(cloudinaryService).deleteImage(publicProfileImageId);
     }
 
     @Test
@@ -786,5 +786,23 @@ class UserServiceTest {
 
         // Assert
         assertThat(optionalUpdatedUser).isEmpty();
+    }
+
+    @Test
+    void changeProfileImage_givenExistingUserAndExistingProfileImageIdButInvalidImage_shouldTrowAndNotDeleteOldImage() {
+        // Arrange
+        var userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        var imageDataUri = "imageDataUri";
+
+        given(cloudinaryService.uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, userId))
+                .willThrow();
+
+        // Act
+        // Assert
+        assertThatThrownBy(() ->
+                underTest.changeProfileImage(userId, imageDataUri));
+
+        verify(cloudinaryService, never()).deleteImage(anyString());
     }
 }

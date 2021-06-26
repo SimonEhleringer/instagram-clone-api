@@ -185,11 +185,11 @@ public class UserService {
 
         var user = optionalUser.get();
 
+        var publicImageId = cloudinaryService.uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, user.getUserId());
+
         if (user.getPublicProfileImageId() != null) {
             cloudinaryService.deleteImage(user.getPublicProfileImageId());
         }
-
-        var publicImageId = cloudinaryService.uploadImage(imageDataUri, ImageType.PROFILE_IMAGE, user.getUserId());
 
         user.setPublicProfileImageId(publicImageId);
 
