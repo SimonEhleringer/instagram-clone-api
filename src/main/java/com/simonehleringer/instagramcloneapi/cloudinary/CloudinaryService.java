@@ -18,7 +18,7 @@ public class CloudinaryService {
         var params = ObjectUtils.asMap(
                 "resource_type", "auto",
                 "folder", "instagram-clone/" + imageType.getFolderName() + "/" + userId.toString(),
-                "allowed_formats", new String[] { "jpg", "jpeg", "png" }
+                "allowed_formats", new String[] { "jpg", "jpeg", "png", "webp" }
         );
 
         try {
