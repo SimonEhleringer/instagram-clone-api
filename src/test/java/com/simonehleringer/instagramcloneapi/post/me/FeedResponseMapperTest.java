@@ -34,7 +34,6 @@ class FeedResponseMapperTest {
                 username,
                 "email",
                 "encodedPassword",
-                "characteristics",
                 publicProfileImageId,
                 new ArrayList<>(),
                 new ArrayList<>(),

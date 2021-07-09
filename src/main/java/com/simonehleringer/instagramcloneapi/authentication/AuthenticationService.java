@@ -30,8 +30,7 @@ public class AuthenticationService {
         var userToCreate = new User(
                 fullName,
                 username,
-                email,
-                ""
+                email
         );
 
         var createdUser = userService.createUser(userToCreate, password);

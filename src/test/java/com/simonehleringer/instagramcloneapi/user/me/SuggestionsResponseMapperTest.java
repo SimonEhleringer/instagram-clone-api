@@ -27,7 +27,6 @@ class SuggestionsResponseMapperTest {
                 username,
                 "email",
                 "encodedPassword",
-                "characteristics",
                 publicProfileImageId,
                 new ArrayList<>(),
                 new ArrayList<>(),

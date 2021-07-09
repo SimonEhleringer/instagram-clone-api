@@ -37,7 +37,6 @@ class UserRepositoryTest {
                 "Username",
                 "Firstname.Lastname@mail.com",
                 "encodedPassword",
-                "characteristics",
                 "profileImageLocation"
         );
 
@@ -63,7 +62,6 @@ class UserRepositoryTest {
                 "Username",
                 "Firstname.Lastname@mail.com",
                 "encodedPassword",
-                "characteristics",
                 "profileImageLocation"
         );
 
@@ -88,7 +86,6 @@ class UserRepositoryTest {
                 usernameToSave,
                 "FullName@Mail.com",
                 "EncodedPassword",
-                "Characteristics",
                 "ProfileImageLocation"
         );
 
@@ -112,7 +109,6 @@ class UserRepositoryTest {
                 usernameToSave,
                 "FullName@Mail.com",
                 "EncodedPassword",
-                "Characteristics",
                 "ProfileImageLocation"
         );
 
@@ -137,7 +133,6 @@ class UserRepositoryTest {
                 "Username",
                 emailToSave,
                 "EncodedPassword",
-                "Characteristics",
                 "ProfileImageLocation"
         );
 
@@ -161,7 +156,6 @@ class UserRepositoryTest {
                 "Username",
                 emailToSave,
                 "EncodedPassword",
-                "Characteristics",
                 "ProfileImageLocation"
         );
 
@@ -182,7 +176,6 @@ class UserRepositoryTest {
             "username",
             "email@test.com",
             "encodedPassword",
-            "characteristics",
             "publicProfileImageId"
         );
 
@@ -191,7 +184,6 @@ class UserRepositoryTest {
                 "username",
                 "email@test.com",
                 "encodedPassword",
-                "characteristics",
                 "publicProfileImageId"
         );
 

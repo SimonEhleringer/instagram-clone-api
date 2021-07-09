@@ -35,7 +35,6 @@ class PostRepositoryTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -44,7 +43,6 @@ class PostRepositoryTest {
 
         var anotherUser = new User(
                 null,
-                "",
                 "",
                 "",
                 "",
@@ -106,7 +104,6 @@ class PostRepositoryTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -115,7 +112,6 @@ class PostRepositoryTest {
 
         var anotherUser = new User(
                 null,
-                "",
                 "",
                 "",
                 "",

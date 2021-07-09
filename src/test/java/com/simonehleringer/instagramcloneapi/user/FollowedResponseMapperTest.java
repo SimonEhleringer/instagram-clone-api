@@ -25,7 +25,6 @@ class FollowedResponseMapperTest {
                 username,
                 "email",
                 "encodedPassword",
-                "characteristics",
                 publicProfileImageId,
                 new ArrayList<>(),
                 new ArrayList<>(),

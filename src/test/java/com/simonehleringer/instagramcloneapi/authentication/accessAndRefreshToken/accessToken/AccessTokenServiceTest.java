@@ -53,7 +53,6 @@ class AccessTokenServiceTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),

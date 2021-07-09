@@ -75,7 +75,6 @@ class PostServiceTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -155,7 +154,6 @@ class PostServiceTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -196,7 +194,6 @@ class PostServiceTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -229,7 +226,6 @@ class PostServiceTest {
 
         var user = new User(
             userId,
-            "",
             "",
             "",
             "",
@@ -281,7 +277,6 @@ class PostServiceTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -290,7 +285,6 @@ class PostServiceTest {
 
         var user = new User(
                 userId,
-                "",
                 "",
                 "",
                 "",

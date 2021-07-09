@@ -47,8 +47,7 @@ class UserServiceTest {
         var user = new User(
                 "Firstname Lastname",
                 "Username",
-                "Firstname.Lastname@mail.com",
-                ""
+                "Firstname.Lastname@mail.com"
         );
 
         var password = "password";
@@ -81,8 +80,7 @@ class UserServiceTest {
         var user = new User(
                 "Firstname Lastname",
                 "Username",
-                "Firstname.Lastname@mail.com",
-                ""
+                "Firstname.Lastname@mail.com"
         );
 
         var password = "password";
@@ -113,8 +111,7 @@ class UserServiceTest {
         var user = new User(
                 "Firstname Lastname",
                 username,
-                "Firstname.Lastname@mail.com",
-                ""
+                "Firstname.Lastname@mail.com"
         );
 
         var password = "password";
@@ -173,7 +170,6 @@ class UserServiceTest {
                 username,
                 "FullName@mail.com",
                 "EncodedPassword",
-                "Characteristics",
                 "ProfileImageLocation"
         ));
 
@@ -197,7 +193,6 @@ class UserServiceTest {
                 "Username",
                 email,
                 "EncodedPassword",
-                "Characteristics",
                 "ProfileImageLocation"
         ));
 
@@ -223,7 +218,6 @@ class UserServiceTest {
                 "",
                 "",
                 "EncodedPassword",
-                "",
                 ""
         );
 
@@ -367,7 +361,6 @@ class UserServiceTest {
             "",
             "",
             "",
-            "",
             new ArrayList<>(),
             new ArrayList<>(),
             new ArrayList<>(),
@@ -410,7 +403,6 @@ class UserServiceTest {
 
         var user = new User(
                 userId,
-                "",
                 "",
                 "",
                 "",
@@ -460,7 +452,6 @@ class UserServiceTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -469,7 +460,6 @@ class UserServiceTest {
 
         var followed = new User(
                 followedId,
-                "",
                 "",
                 "",
                 "",
@@ -507,7 +497,6 @@ class UserServiceTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -516,7 +505,6 @@ class UserServiceTest {
 
         var followed = new User(
                 followedId,
-                "",
                 "",
                 "",
                 "",
@@ -546,7 +534,6 @@ class UserServiceTest {
 
         var follower = new User(
                 followerId,
-                "",
                 "",
                 "",
                 "",
@@ -596,7 +583,6 @@ class UserServiceTest {
                 "",
                 "",
                 "",
-                "",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -608,7 +594,6 @@ class UserServiceTest {
 
         var user = new User(
                 userId,
-                "",
                 "",
                 "",
                 "",
@@ -646,7 +631,6 @@ class UserServiceTest {
 
         var user = new User(
             userId,
-            "",
             "",
             "",
             "",
@@ -706,7 +690,6 @@ class UserServiceTest {
                 "username",
                 "email",
                 "encodedPassword",
-                "characteristics",
                 null,
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -746,7 +729,6 @@ class UserServiceTest {
                 "username",
                 "email",
                 "encodedPassword",
-                "characteristics",
                 publicProfileImageId,
                 new ArrayList<>(),
                 new ArrayList<>(),

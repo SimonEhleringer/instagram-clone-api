@@ -47,10 +47,6 @@ public class User {
     @Size(max = ENCODED_PASSWORD__SIZE_MAX)
     private String encodedPassword;
 
-    @NotNull
-    @Size(max = CHARACTERISTICS__SIZE_MAX)
-    private String characteristics;
-
     @Size(max = PUBLIC_PROFILE_IMAGE_ID__SIZE_MAX)
     private String publicProfileImageId;
 
@@ -67,19 +63,17 @@ public class User {
     @ManyToMany(mappedBy = "followers", cascade = CascadeType.ALL)
     private List<User> followed;
 
-    public User(@NotNull @Size(max = FULL_NAME__SIZE_MAX) String fullName, @NotNull @Size(max = USERNAME__SIZE_MAX) @Pattern(regexp = USERNAME__PATTERN_REGEXP) String username, @NotNull @Email @Size(max = EMAIL__SIZE_MAX) String email, @NotNull @Size(max = CHARACTERISTICS__SIZE_MAX) String characteristics) {
+    public User(@NotNull @Size(max = FULL_NAME__SIZE_MAX) String fullName, @NotNull @Size(max = USERNAME__SIZE_MAX) @Pattern(regexp = USERNAME__PATTERN_REGEXP) String username, @NotNull @Email @Size(max = EMAIL__SIZE_MAX) String email) {
         this.fullName = fullName;
         this.username = username;
         this.email = email;
-        this.characteristics = characteristics;
     }
 
-    public User(@Size(max = FULL_NAME__SIZE_MAX) String fullName, @Size(max = USERNAME__SIZE_MAX) @Pattern(regexp = USERNAME__PATTERN_REGEXP) String username, @Email String email, @Size(max = ENCODED_PASSWORD__SIZE_MAX) String encodedPassword, @Size(max = CHARACTERISTICS__SIZE_MAX) String characteristics, String publicProfileImageId) {
+    public User(@Size(max = FULL_NAME__SIZE_MAX) String fullName, @Size(max = USERNAME__SIZE_MAX) @Pattern(regexp = USERNAME__PATTERN_REGEXP) String username, @Email String email, @Size(max = ENCODED_PASSWORD__SIZE_MAX) String encodedPassword, String publicProfileImageId) {
         this.fullName = fullName;
         this.username = username;
         this.email = email;
         this.encodedPassword = encodedPassword;
-        this.characteristics = characteristics;
         this.publicProfileImageId = publicProfileImageId;
     }
 }

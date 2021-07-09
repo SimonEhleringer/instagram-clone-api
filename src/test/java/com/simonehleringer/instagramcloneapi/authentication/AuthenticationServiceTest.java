@@ -47,13 +47,11 @@ class AuthenticationServiceTest {
         var username = "Username";
         var email = "Email";
         var password = "Password";
-        var characteristics = "";
 
         var user = new User(
             fullName,
             username,
-            email,
-            characteristics
+            email
         );
 
         var expectedAccessAndRefreshToken = new AccessAndRefreshToken(
@@ -79,7 +77,6 @@ class AuthenticationServiceTest {
         assertThat(capturedUser.getFullName()).isEqualTo(fullName);
         assertThat(capturedUser.getUsername()).isEqualTo(username);
         assertThat(capturedUser.getEmail()).isEqualTo(email);
-        assertThat(capturedUser.getCharacteristics()).isEqualTo(characteristics);
         assertThat(capturedPassword).isEqualTo(password);
 
         var createdUserArgumentCaptor = ArgumentCaptor.forClass(User.class);
